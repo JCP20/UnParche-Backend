@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllUsers } from "../controllers/user.controller";
+import { getAllUsers,Register } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -8,6 +8,7 @@ const router = Router();
 // put
 // delete
 
-router.get("/pepito", getAllUsers);
+router.get("/", getAllUsers);
+router.post("/register", Register);
 
 export default router;
