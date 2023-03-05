@@ -47,7 +47,7 @@ export const Register = async(req:Request, res: Response)=>{
     const passwordCrypt: string = await bcrypt.hash(password, salt);
 
     // Crear una nueva instancia del modelo de usuario y guardarla en la base de datos
-    const nuevoUsuario = new UserModel({ name, email, username,password: passwordCrypt});
+    const nuevoUsuario = new UserModel({ name, email, username, password: passwordCrypt, verified: false});
     await nuevoUsuario.save();
 
     res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });

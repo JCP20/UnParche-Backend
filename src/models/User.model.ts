@@ -5,7 +5,6 @@ import PubModel from "./Pub.model";
 
 const userSchema = new Schema(
   {
-    id: {type: Number, required: true},
     username: {type: String, required: true, unique: true},
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
