@@ -4,6 +4,7 @@ export interface IUser {
   email: string;
   name: string;
   password: string;
+  verified: boolean;
   //groups:Array<Grupo>;
   //publications:Array<Pub>; 
   createdAt: string;
@@ -12,24 +13,15 @@ export interface IUser {
 
 export interface IGroup {
   id:number;
-  username: string;
-  email: string;
-  name: string;
-  password: string;
-  //groups:Array<Grupo>;
-  //publications:Array<Pub>; 
+  groupname: string; 
   createdAt: string;
   updatedAt: string;
 }
 
 export interface IPub {
   id:number;
-  username: string;
-  email: string;
-  name: string;
-  password: string;
-  //groups:Array<Grupo>;
-  //publications:Array<Pub>; 
+  pubname: string;
+  content: string; 
   createdAt: string;
   updatedAt: string;
 }
