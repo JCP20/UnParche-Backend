@@ -1,7 +1,6 @@
 {
   "name": "backend-unparche",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
@@ -11,15 +10,29 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/mongoose": "^5.11.97",
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "mongoose": "^7.0.0"
+    "mongodb": "^5.1.0",
+    "mongoose": "^7.0.0",
+    "types": "^0.1.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "dotenv": "^16.0.3",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JCP20/UnParche-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JCP20/UnParche-Backend/issues"
+  },
+  "homepage": "https://github.com/JCP20/UnParche-Backend#readme",
+  "description": ""
 }
