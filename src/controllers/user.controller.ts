@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     // retornar todos los usuarios registrados
-    console.log("hola mundo");
     const users = await UserModel.find({});
     return res.status(200).json({ ok: true, data: users });
   } catch (error) {
