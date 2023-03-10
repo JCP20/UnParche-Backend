@@ -6,7 +6,6 @@ import { IUser } from "../interfaces/index"
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     // retornar todos los usuarios registrados
-    console.log("hola mundo");
     const users = await UserModel.find({});
     return res.status(200).json({ ok: true, data: users });
   } catch (error) {
@@ -19,8 +18,8 @@ export const Register = async(req:Request, res: Response)=>{
   //registro de usuario 
   try {
     // Validar existencia de la información del usuario
-    const { name, email, password, username,} = req.body;
-    if (!name || !email || !password|| !username) {
+    const {email, password, username, password_confirmation} = req.body;
+    if (!password_confirmation  || !email || !password|| !username) {
       return res.status(400).json({ mensaje: 'Por favor, proporcione todos los datos requeridos' });
     }
     // Verificar si ya existe un usuario con el correo electrónico proporcionado
@@ -37,6 +36,10 @@ export const Register = async(req:Request, res: Response)=>{
     if (!regexPass.test(password)) {
       return res.status(400).json({ mensaje: 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un número' });
     }
+    //verificar que las contraseñas coincidan
+    if(password != password_confirmation){
+      return res.status(400).json({mensaje: "Las contraseñas no coinciden"})
+    }
     //verificar si ya existe usuario con el mismo username
     const usernameExistente: IUser | null = await UserModel.findOne({ username });
     if (usernameExistente) {
@@ -47,7 +50,7 @@ export const Register = async(req:Request, res: Response)=>{
     const passwordCrypt: string = await bcrypt.hash(password, salt);
 
     // Crear una nueva instancia del modelo de usuario y guardarla en la base de datos
-    const nuevoUsuario = new UserModel({ name, email, username,password: passwordCrypt});
+    const nuevoUsuario = new UserModel({email, username,password: passwordCrypt});
     await nuevoUsuario.save();
 
     res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });
