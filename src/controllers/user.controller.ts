@@ -85,20 +85,25 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(404).json({ msg: "El correo dado no se encuentra registrado" });
     }
 
-    if(!currentUserk.verified){
-      //Se verifica que el usuario haya verificado su cuenta al momento de registrarse
-      return res.status(401).json({ msg: "Debes verificar tu cuenta para poder ingresar" });
-    }
+    //se verifica que la contraseña sea correcta
+    bcrypt.compare(password, currentUserk.password, function (err, matches) {
+      if (err) {
+        console.log('Error while checking password');
+      } else if (matches) {
+        console.log('The password matches!');
 
-
-    //No devuelve nada si la contraseña no coincide, se demora mucho y por el mismo await no sigue hasta que encuentre una respuesta
-    let equalPass = TimeoutPromise(bcrypt.compare(password, currentUserk.password), 500);
- 
-    if(await equalPass){
-      //Verifica que la contraseña ingresada sea la misma registrada
-      return res.status(200).json({ ok: true, msg: "El usuario ha accedido a su cuenta exitosamente" });
-    }         
-       
+        if(!currentUserk.verified){
+          //Se revisa que el usuario haya verificado su cuenta al momento de registrarse
+          return res.status(401).json({ msg: "Debes verificar tu cuenta para poder ingresar" });
+        }else{
+          return res.status(401).json({ msg: "El usuario ha ingresado con éxito a su cuenta" });
+        }
+        
+      } else {
+        console.log('The password does NOT match!');
+        return res.status(400).json({ ok: false, msg: "La contraseña es incorrecta, vuelva a intentarlo" });
+      }
+    });          
 
   } catch (error) {
     console.log(error);
