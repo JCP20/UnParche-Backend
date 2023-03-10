@@ -2,6 +2,7 @@ import UserModel from "../models/User.model";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt"
 import { IUser } from "../interfaces/index"
+import { transporter } from "../services/email";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -50,15 +51,24 @@ export const Register = async(req:Request, res: Response)=>{
     const nuevoUsuario = new UserModel({ name, email, username,password: passwordCrypt});
     await nuevoUsuario.save();
 
-    res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });
+    //res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });
+
+    // Configuración de los elementos del correro de verificación
+    const mailOptions = {
+      from: 'unparcheadm@gmail.com',
+      to: email,
+      subject: '[UNParche] Verifica tu correo electrónico ',
+      text: "Para verificar tu correo electrónico ve al siguiente enlace xxxxxxxxxxx"
+    }
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(info);
+
+    console.log("Entrando SendMail");
+    return res.status(201).json({ mensaje: 'Usuario registrado exitosamente' });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Ocurrió un error en el servidor al registrar el usuario' });
   }
 };
-
-
-
-
-
-
