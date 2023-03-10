@@ -10,18 +10,3 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
 }
-
-export interface IGroup {
-  id:number;
-  groupname: string; 
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface IPub {
-  id:number;
-  pubname: string;
-  content: string; 
-  createdAt: string;
-  updatedAt: string;
-}
