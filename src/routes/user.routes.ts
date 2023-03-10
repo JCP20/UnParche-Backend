@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { getAllUsers } from "../controllers/user.controller";
+
 import { validateJwt } from "../middlewares/validate-jwt";
+import { getAllUsers,Register,loginUser } from "../controllers/user.controller";
 
 const router = Router();
 
@@ -9,6 +10,8 @@ const router = Router();
 // put
 // delete
 
-router.get("/pepito", getAllUsers);
+router.get("/", getAllUsers);
+router.post("/register", Register);
+router.post("/login", loginUser);
 
 export default router;
