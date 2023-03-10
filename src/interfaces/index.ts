@@ -9,3 +9,8 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IPayloadJWT {
+  uid: string;
+  name: string;
+}

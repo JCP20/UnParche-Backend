@@ -1,4 +1,6 @@
 import { Router } from "express";
+
+import { validateJwt } from "../middlewares/validate-jwt";
 import { getAllUsers,Register,loginUser } from "../controllers/user.controller";
 
 const router = Router();
