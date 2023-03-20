@@ -1,12 +1,11 @@
 import UserModel from "../models/User.model";
 import { Request, Response } from "express";
-import bcrypt from "bcrypt"
-import { IUser } from "../interfaces/index"
+import bcrypt from "bcrypt";
+import { IUser } from "../interfaces/index";
+import { transporter } from "../services/email";
 
 export const TimeoutPromise = (pr: Promise<any>, timeout: number) =>
-  Promise.race([pr, new Promise((_, rej) =>
-    setTimeout(rej, timeout)
-  )]);
+  Promise.race([pr, new Promise((_, rej) => setTimeout(rej, timeout))]);
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -17,47 +16,96 @@ export const getAllUsers = async (req: Request, res: Response) => {
     console.log(error);
     return res.status(500).json({ ok: false, msg: "Contact an admin" });
   }
-
 };
-export const Register = async(req:Request, res: Response)=>{
-  //registro de usuario 
+export const Register = async (req: Request, res: Response) => {
+  //registro de usuario
   try {
     // Validar existencia de la información del usuario
-    const { name, email, password, username,} = req.body;
-    if (!name || !email || !password|| !username) {
-      return res.status(400).json({ ok: false, msg: 'Por favor, proporcione todos los datos requeridos' });
+    const { name, email, password, username } = req.body;
+    if (!name || !email || !password || !username) {
+      return res
+        .status(400)
+        .json({
+          ok: false,
+          msg: "Por favor, proporcione todos los datos requeridos",
+        });
     }
     // Verificar si ya existe un usuario con el correo electrónico proporcionado
     const usuarioExistente: IUser | null = await UserModel.findOne({ email });
     if (usuarioExistente) {
-      return res.status(400).json({ ok: false, msg: 'Ya existe un usuario con ese correo electrónico' });
+      return res
+        .status(400)
+        .json({
+          ok: false,
+          msg: "Ya existe un usuario con ese correo electrónico",
+        });
     }
     // Verificar si el correo es institucional
-    if(!email.includes("@unal.edu.co")){
-      return res.status(400).json({ ok: false, msg: 'Debe registrarse con su correo institucional' });
+    if (!email.includes("@unal.edu.co")) {
+      return res
+        .status(400)
+        .json({
+          ok: false,
+          msg: "Debe registrarse con su correo institucional",
+        });
     }
     // Verificar seguridadd e la contraseña
     const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!regexPass.test(password)) {
-      return res.status(400).json({ ok: false, msg: 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un número' });
+      return res
+        .status(400)
+        .json({
+          ok: false,
+          msg: "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número",
+        });
     }
     //verificar si ya existe usuario con el mismo username
-    const usernameExistente: IUser | null = await UserModel.findOne({ username });
+    const usernameExistente: IUser | null = await UserModel.findOne({
+      username,
+    });
     if (usernameExistente) {
-      return res.status(400).json({ ok: false, msg: 'Ya existe un usuario con ese nombre de usuario' });
+      return res
+        .status(400)
+        .json({
+          ok: false,
+          msg: "Ya existe un usuario con ese nombre de usuario",
+        });
     }
     // Encriptar contraseña
     const salt: string = await bcrypt.genSalt(10);
     const passwordCrypt: string = await bcrypt.hash(password, salt);
 
     // Crear una nueva instancia del modelo de usuario y guardarla en la base de datos
-    const nuevoUsuario = new UserModel({ name, email, username, password: passwordCrypt, verified: false});
+    const nuevoUsuario = new UserModel({
+      name,
+      email,
+      username,
+      password: passwordCrypt,
+      verified: false,
+    });
     await nuevoUsuario.save();
 
-    res.status(201).json({ ok: true, msg: 'Usuario registrado exitosamente' });
+    // Configuración de los elementos del correro de verificación
+    const mailOptions = {
+      from: "unparcheadm@gmail.com",
+      to: email,
+      subject: "[UNParche] Verifica tu correo electrónico ",
+      text: "Para verificar tu correo electrónico ve al siguiente enlace xxxxxxxxxxx",
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(info);
+
+    console.log("Entrando SendMail");
+    return res.status(201).json({ mensaje: "Usuario registrado exitosamente" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ ok: false, msg: 'Ocurrió un error en el servidor al registrar el usuario' });
+    res
+      .status(500)
+      .json({
+        ok: false,
+        msg: "Ocurrió un error en el servidor al registrar el usuario",
+      });
   }
 };
 
@@ -65,9 +113,9 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     // El usuario ingrese a la cuenta
     console.log("hola login");
-    const { email, password} = req.body;
-    //key puede referirse al username o al email 
-    const currentUserk: IUser | null = await UserModel.findOne({email});
+    const { email, password } = req.body;
+    //key puede referirse al username o al email
+    const currentUserk: IUser | null = await UserModel.findOne({ email });
 
     /** Se debe especificar si de ha dado el correo o el nombre de usuario,
      * por ahora se implementa sólo con email,
@@ -76,43 +124,64 @@ export const loginUser = async (req: Request, res: Response) => {
 
     if (!email || !password) {
       //Se verifica que estén los datos pedidos
-      return res.status(400).json({ ok: false, msg: 'Por favor, proporcione todos los datos requeridos' });
+      return res
+        .status(400)
+        .json({
+          ok: false,
+          msg: "Por favor, proporcione todos los datos requeridos",
+        });
     }
 
-    if(!currentUserk){
+    if (!currentUserk) {
       //Se verifica que el nombre de usuario o correo correspondan a algun usuario registrado
-      return res.status(404).json({ ok: false, msg: "El correo dado no se encuentra registrado" });
+      return res
+        .status(404)
+        .json({ ok: false, msg: "El correo dado no se encuentra registrado" });
     }
 
     //se verifica que la contraseña sea correcta
     bcrypt.compare(password, currentUserk.password, function (err, matches) {
       if (err) {
-        console.log('Error while checking password');
-        return res.status(500).json({ ok: false, msg: "Error al verificar la contraseña" });
+        console.log("Error while checking password");
+        return res
+          .status(500)
+          .json({ ok: false, msg: "Error al verificar la contraseña" });
       } else if (matches) {
-        console.log('The password matches!');
+        console.log("The password matches!");
 
-        if(!currentUserk.verified){
+        if (!currentUserk.verified) {
           //Se revisa que el usuario haya verificado su cuenta al momento de registrarse
-          return res.status(401).json({ ok: false, msg: "Debes verificar tu cuenta para poder ingresar" });
-        }else{
-          return res.status(401).json({ ok: true, msg: "El usuario ha ingresado con éxito a su cuenta" });
+          return res
+            .status(401)
+            .json({
+              ok: false,
+              msg: "Debes verificar tu cuenta para poder ingresar",
+            });
+        } else {
+          return res
+            .status(401)
+            .json({
+              ok: true,
+              msg: "El usuario ha ingresado con éxito a su cuenta",
+            });
         }
-        
       } else {
-        console.log('The password does NOT match!');
-        return res.status(400).json({ ok: false, msg: "La contraseña es incorrecta, vuelva a intentarlo" });
+        console.log("The password does NOT match!");
+        return res
+          .status(400)
+          .json({
+            ok: false,
+            msg: "La contraseña es incorrecta, vuelva a intentarlo",
+          });
       }
-    });          
-
+    });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ ok: false, msg: "Ocurrió un error en el servidor al ingresar a la cuenta" });
+    return res
+      .status(500)
+      .json({
+        ok: false,
+        msg: "Ocurrió un error en el servidor al ingresar a la cuenta",
+      });
   }
 };
-
-
-
-
-
-
