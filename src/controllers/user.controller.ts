@@ -21,55 +21,49 @@ export const Register = async (req: Request, res: Response) => {
   //registro de usuario
   try {
     // Validar existencia de la información del usuario
-    const { name, email, password, username } = req.body;
+    const { name, email, password, username, password_confirmation } = req.body;
     if (!name || !email || !password || !username) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "Por favor, proporcione todos los datos requeridos",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "Por favor, proporcione todos los datos requeridos",
+      });
     }
     // Verificar si ya existe un usuario con el correo electrónico proporcionado
     const usuarioExistente: IUser | null = await UserModel.findOne({ email });
     if (usuarioExistente) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "Ya existe un usuario con ese correo electrónico",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "Ya existe un usuario con ese correo electrónico",
+      });
     }
     // Verificar si el correo es institucional
     if (!email.includes("@unal.edu.co")) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "Debe registrarse con su correo institucional",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "Debe registrarse con su correo institucional",
+      });
     }
     // Verificar seguridadd e la contraseña
     const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!regexPass.test(password)) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número",
+      });
+    }
+    //verificar que las contraseñas coincidan
+    if (password != password_confirmation) {
+      return res.status(400).json({ mensaje: "Las contraseñas no coinciden" });
     }
     //verificar si ya existe usuario con el mismo username
     const usernameExistente: IUser | null = await UserModel.findOne({
       username,
     });
     if (usernameExistente) {
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "Ya existe un usuario con ese nombre de usuario",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "Ya existe un usuario con ese nombre de usuario",
+      });
     }
     // Encriptar contraseña
     const salt: string = await bcrypt.genSalt(10);
@@ -100,12 +94,10 @@ export const Register = async (req: Request, res: Response) => {
     return res.status(201).json({ mensaje: "Usuario registrado exitosamente" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        ok: false,
-        msg: "Ocurrió un error en el servidor al registrar el usuario",
-      });
+    res.status(500).json({
+      ok: false,
+      msg: "Ocurrió un error en el servidor al registrar el usuario",
+    });
   }
 };
 
@@ -124,12 +116,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
     if (!email || !password) {
       //Se verifica que estén los datos pedidos
-      return res
-        .status(400)
-        .json({
-          ok: false,
-          msg: "Por favor, proporcione todos los datos requeridos",
-        });
+      return res.status(400).json({
+        ok: false,
+        msg: "Por favor, proporcione todos los datos requeridos",
+      });
     }
 
     if (!currentUserk) {
@@ -151,37 +141,29 @@ export const loginUser = async (req: Request, res: Response) => {
 
         if (!currentUserk.verified) {
           //Se revisa que el usuario haya verificado su cuenta al momento de registrarse
-          return res
-            .status(401)
-            .json({
-              ok: false,
-              msg: "Debes verificar tu cuenta para poder ingresar",
-            });
+          return res.status(401).json({
+            ok: false,
+            msg: "Debes verificar tu cuenta para poder ingresar",
+          });
         } else {
-          return res
-            .status(401)
-            .json({
-              ok: true,
-              msg: "El usuario ha ingresado con éxito a su cuenta",
-            });
+          return res.status(401).json({
+            ok: true,
+            msg: "El usuario ha ingresado con éxito a su cuenta",
+          });
         }
       } else {
         console.log("The password does NOT match!");
-        return res
-          .status(400)
-          .json({
-            ok: false,
-            msg: "La contraseña es incorrecta, vuelva a intentarlo",
-          });
+        return res.status(400).json({
+          ok: false,
+          msg: "La contraseña es incorrecta, vuelva a intentarlo",
+        });
       }
     });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({
-        ok: false,
-        msg: "Ocurrió un error en el servidor al ingresar a la cuenta",
-      });
+    return res.status(500).json({
+      ok: false,
+      msg: "Ocurrió un error en el servidor al ingresar a la cuenta",
+    });
   }
 };
