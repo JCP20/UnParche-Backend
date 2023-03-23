@@ -18,5 +18,5 @@ app.use(express.json());
 app.use("/users", userRoutes);
 
 app.listen(app.get("port"), () => {
-  console.log("hola corriendo en http://localhost:4000");
+  console.log("Servidor escuchando en http://localhost:4000");
 });

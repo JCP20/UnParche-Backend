@@ -1,17 +1,37 @@
 import { Router } from "express";
-
-import { validateJwt } from "../middlewares/validate-jwt";
-import { getAllUsers,Register,loginUser } from "../controllers/user.controller";
+import { check } from "express-validator";
+import { isValidPassword } from "../helpers/customChecks";
+import { validateFields } from "../middlewares/validate-fields";
+import {
+  getAllUsers,
+  Register,
+  loginUser,
+  getUserById,
+} from "../controllers/user.controller";
 
 const router = Router();
 
-// get
-// post
-// put
-// delete
-
 router.get("/", getAllUsers);
-router.post("/register", Register);
+router.get("/:id", getUserById);
+router.post(
+  "/register",
+  [
+    check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("username", "El username es obligatorio").not().isEmpty(),
+    check("email", "El email es obligatorio").isEmail(),
+    check("password", "La contraseña no cumple con el estándar").custom(
+      isValidPassword
+    ),
+    check(
+      "password_confirmation",
+      "La confirmación de contraseña es obligatoria"
+    )
+      .not()
+      .isEmpty(),
+    validateFields,
+  ],
+  Register
+);
 router.post("/login", loginUser);
 
 export default router;

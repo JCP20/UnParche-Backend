@@ -2,10 +2,8 @@ import UserModel from "../models/User.model";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { IUser } from "../interfaces/index";
-import { transporter } from "../services/email";
-
-export const TimeoutPromise = (pr: Promise<any>, timeout: number) =>
-  Promise.race([pr, new Promise((_, rej) => setTimeout(rej, timeout))]);
+import { sendEmail } from "../helpers/email";
+import { verificarUsuario } from "../helpers/emails/verificarUsuario";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -17,25 +15,22 @@ export const getAllUsers = async (req: Request, res: Response) => {
     return res.status(500).json({ ok: false, msg: "Contact an admin" });
   }
 };
+
 export const Register = async (req: Request, res: Response) => {
   //registro de usuario
   try {
     // Validar existencia de la información del usuario
     const { name, email, password, username, password_confirmation } = req.body;
-    if (!name || !email || !password || !username) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Por favor, proporcione todos los datos requeridos",
-      });
-    }
     // Verificar si ya existe un usuario con el correo electrónico proporcionado
     const usuarioExistente: IUser | null = await UserModel.findOne({ email });
+
     if (usuarioExistente) {
       return res.status(400).json({
         ok: false,
         msg: "Ya existe un usuario con ese correo electrónico",
       });
     }
+
     // Verificar si el correo es institucional
     if (!email.includes("@unal.edu.co")) {
       return res.status(400).json({
@@ -43,22 +38,17 @@ export const Register = async (req: Request, res: Response) => {
         msg: "Debe registrarse con su correo institucional",
       });
     }
-    // Verificar seguridadd e la contraseña
-    const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (!regexPass.test(password)) {
-      return res.status(400).json({
-        ok: false,
-        msg: "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número",
-      });
-    }
+
     //verificar que las contraseñas coincidan
     if (password != password_confirmation) {
       return res.status(400).json({ mensaje: "Las contraseñas no coinciden" });
     }
+
     //verificar si ya existe usuario con el mismo username
     const usernameExistente: IUser | null = await UserModel.findOne({
       username,
     });
+
     if (usernameExistente) {
       return res.status(400).json({
         ok: false,
@@ -77,21 +67,21 @@ export const Register = async (req: Request, res: Response) => {
       password: passwordCrypt,
       verified: false,
     });
+
     await nuevoUsuario.save();
 
-    // Configuración de los elementos del correro de verificación
-    const mailOptions = {
-      from: "unparcheadm@gmail.com",
-      to: email,
-      subject: "[UNParche] Verifica tu correo electrónico ",
-      text: "Para verificar tu correo electrónico ve al siguiente enlace xxxxxxxxxxx",
-    };
+    await sendEmail(
+      nuevoUsuario.email,
+      "[UNParche] Verifica tu correo electrónico",
+      verificarUsuario(
+        nuevoUsuario.name,
+        `http://localhost:3000/verificar/${nuevoUsuario.id}`
+      )
+    );
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log(info);
-
-    console.log("Entrando SendMail");
-    return res.status(201).json({ mensaje: "Usuario registrado exitosamente" });
+    return res
+      .status(201)
+      .json({ ok: true, mensaje: "Usuario registrado exitosamente" });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -104,7 +94,6 @@ export const Register = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     // El usuario ingrese a la cuenta
-    console.log("hola login");
     const { email, password } = req.body;
     //key puede referirse al username o al email
     const currentUserk: IUser | null = await UserModel.findOne({ email });
@@ -165,5 +154,20 @@ export const loginUser = async (req: Request, res: Response) => {
       ok: false,
       msg: "Ocurrió un error en el servidor al ingresar a la cuenta",
     });
+  }
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    // Obtener un usuario por su id
+    const { id } = req.params;
+    const usuario = await UserModel.findById(id);
+    if (usuario) {
+      return res.status(200).json({ ok: true, data: usuario });
+    } else {
+      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
+    }
+  } catch (error) {
+    res.status(500).json({ ok: false, msg: "Ha ocurrido un error" });
   }
 };
