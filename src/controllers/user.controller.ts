@@ -20,7 +20,7 @@ export const Register = async (req: Request, res: Response) => {
   //registro de usuario
   try {
     // Validar existencia de la información del usuario
-    const { name, email, password, username, password_confirmation } = req.body;
+    const { email, password, username, password_confirmation } = req.body;
     // Verificar si ya existe un usuario con el correo electrónico proporcionado
     const usuarioExistente: IUser | null = await UserModel.findOne({ email });
 
@@ -61,7 +61,6 @@ export const Register = async (req: Request, res: Response) => {
 
     // Crear una nueva instancia del modelo de usuario y guardarla en la base de datos
     const nuevoUsuario = new UserModel({
-      name,
       email,
       username,
       password: passwordCrypt,
@@ -74,7 +73,7 @@ export const Register = async (req: Request, res: Response) => {
       nuevoUsuario.email,
       "[UNParche] Verifica tu correo electrónico",
       verificarUsuario(
-        nuevoUsuario.name,
+        nuevoUsuario.username,
         `http://localhost:3000/verificar/${nuevoUsuario.id}`
       )
     );

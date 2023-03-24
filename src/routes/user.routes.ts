@@ -16,7 +16,7 @@ router.get("/:id", getUserById);
 router.post(
   "/register",
   [
-    check("name", "El nombre es obligatorio").not().isEmpty(),
+    // check("name", "El nombre es obligatorio").not().isEmpty(),
     check("username", "El username es obligatorio").not().isEmpty(),
     check("email", "El email es obligatorio").isEmail(),
     check("password", "La contraseña no cumple con el estándar").custom(
