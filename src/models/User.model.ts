@@ -42,5 +42,4 @@ const userModel: IUserModel = {
 };
 
 const User = model<IUser>("User", userSchema);
-
-export { User, userModel };
+export default model<IUser>("UserModel", userSchema);
