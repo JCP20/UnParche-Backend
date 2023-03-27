@@ -2,12 +2,11 @@ import { Router } from "express";
 import { check } from "express-validator";
 import { isValidPassword } from "../../helpers/customChecks";
 import { validateFields } from "../middlewares/validate-fields";
-import {
-  getAllUsers,
-  Register,
-  loginUser,
-  getUserById,
-} from "../controllers/user.controller";
+import { getAllUsers } from "../controllers/user/getAll";
+import { register } from "../controllers/user/register";
+import { loginUser } from "../controllers/user/login";
+import { getUserById } from "../controllers/user/getByID";
+
 
 const router = Router();
 
@@ -30,7 +29,7 @@ router.post(
       .isEmpty(),
     validateFields,
   ],
-  Register
+  register
 );
 router.post("/login", loginUser);
 

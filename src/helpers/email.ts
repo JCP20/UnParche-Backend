@@ -28,3 +28,8 @@ export class NodemailerEmailSender implements IEmailSender {
     });
   }
 }
+
+export const sendEmail = async (to: string, subject: string, html: string) => {
+  const emailSender = new NodemailerEmailSender();
+  await emailSender.send(to, subject, html);
+};
