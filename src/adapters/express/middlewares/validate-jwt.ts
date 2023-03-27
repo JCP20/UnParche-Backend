@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { IPayloadJWT } from "../interfaces";
+import { IPayloadJWT } from "../../../domain/entities/users";
 
 export const validateJwt = (
   req: Request,

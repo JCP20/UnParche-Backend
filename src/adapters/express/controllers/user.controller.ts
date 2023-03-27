@@ -1,9 +1,9 @@
-import UserModel from "../models/User.model";
+import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { IUser } from "../interfaces/index";
-import { sendEmail } from "../helpers/email";
-import { verificarUsuario } from "../helpers/emails/verificarUsuario";
+import { IUser } from "../../../domain/entities/users";
+import { sendEmail } from "../../../helpers/email";
+import { verificarUsuario } from "../../../helpers/emails/verificarUsuario";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
