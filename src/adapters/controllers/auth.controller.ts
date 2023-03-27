@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { generateJWT } from "../../../helpers/jwt";
+import { generateJWT } from "../../helpers/jwt";
 
 export const revalidateToken = async (req: Request, res: Response) => {
   try {
