@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { isValidPassword } from "../../../helpers/customChecks";
+import { isValidPassword } from "../../helpers/customChecks";
 import { validateFields } from "../middlewares/validate-fields";
 import {
   getAllUsers,
   Register,
   loginUser,
   getUserById,
-} from "../../express/controllers/user.controller";
+} from "../controllers/user.controller";
 
 const router = Router();
 

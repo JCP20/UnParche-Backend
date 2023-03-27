@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { IUser } from "../../domain/entities/users";
 import { sendEmail } from "../../helpers/email";
-import { verificarUsuario } from "../../helpers/emails/verificarUsuario";
+import { verificarUsuario } from "../../helpers/emailTemplates/verifyUser";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
