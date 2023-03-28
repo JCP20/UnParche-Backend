@@ -10,6 +10,6 @@ export interface IUser {
 }
 
 export interface IPayloadJWT {
-  id: string;
+  uid: string;
   name: string;
 }

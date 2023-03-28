@@ -20,7 +20,7 @@ export class JWTGenerator {
         (err: Error | null, token?: string) => {
           if (err) {
             console.error(err);
-            reject(
+            reject( 
               new Error("An error has occurred, please contact an admin")
             );
           } else if (!token) {

@@ -17,11 +17,11 @@ export const validateJwt = (
   }
 
   try {
-    const { id, name }: IPayloadJWT = jwt.verify(
+    const { uid, name }: IPayloadJWT = jwt.verify(
       token,
       process.env.SECRET_JWT_SEED as string
     ) as IPayloadJWT;
-    req.body.id = id;
+    req.body.id = uid;
     req.body.name = name;
   } catch (error) {
     console.log(error);
