@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { IPayloadJWT } from "../interfaces";
+import { IPayloadJWT } from "../../domain/entities/users";
 
 export const validateJwt = (
   req: Request,
@@ -21,7 +21,7 @@ export const validateJwt = (
       token,
       process.env.SECRET_JWT_SEED as string
     ) as IPayloadJWT;
-    req.body.uid = uid;
+    req.body.id = uid;
     req.body.name = name;
   } catch (error) {
     console.log(error);
