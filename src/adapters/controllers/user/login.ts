@@ -35,9 +35,11 @@ export const loginUser = async (req: Request, res: Response) => {
     bcrypt.compare(password, currentUserk.password, function (err, matches) {
       if (err) {
         console.log("Error while checking password");
-        return res
-          .status(500)
-          .json({ ok: false, msg: "Error al verificar la contraseña" });
+        return res.status(500).json({
+          ok: false,
+          msg: "Error al verificar la contraseña",
+        });
+        
       } else if (matches) {
         console.log("The password matches!");
 
