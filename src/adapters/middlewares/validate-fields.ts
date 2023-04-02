@@ -6,7 +6,7 @@ export const validateFields = (
   res = response,
   next: () => void
 ) => {
-  // manejo de errores
+  // TODO manejo de errores
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({

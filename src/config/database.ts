@@ -1,15 +1,21 @@
 import mongoose from "mongoose";
-import config from "./config";
 
-mongoose.connect(config.DB.URI || "");
+class Database {
+  private uri: string;
 
-const connection = mongoose.connection;
+  constructor() {
+    this.uri = process.env.MONGO_URI || "";
+  }
 
-connection.once("open", () => {
-  console.log("Db connected!");
-});
+  public async connect(): Promise<void> {
+    try {
+      await mongoose.connect(this.uri);
+      console.log("Db connected!");
+    } catch (err) {
+      console.log(err);
+      process.exit(0);
+    }
+  }
+}
 
-connection.on("error", (err) => {
-  console.log(err);
-  process.exit(0);
-});
+export default Database;
