@@ -1,8 +1,7 @@
 export interface IUser {
-  id: number;
+  id: string;
   username: string;
   email: string;
-  name: string;
   password: string;
   verified: boolean;
   createdAt: string;
@@ -11,5 +10,5 @@ export interface IUser {
 
 export interface IPayloadJWT {
   id: string;
-  name: string;
+  username: string;
 }

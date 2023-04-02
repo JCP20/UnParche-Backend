@@ -4,7 +4,7 @@ import { isValidPassword } from "../helpers/customChecks";
 import { validateFields } from "../middlewares/validate-fields";
 import {
   getAllUsers,
-  Register,
+  registerUser,
   loginUser,
   getUserById,
 } from "../controllers/user.controller";
@@ -30,7 +30,7 @@ router.post(
       .isEmpty(),
     validateFields,
   ],
-  Register
+  registerUser
 );
 router.post("/login", loginUser);
 
