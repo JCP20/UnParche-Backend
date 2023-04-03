@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import { Delete } from "../controllers/group/delete";
-import { getAllGroups } from "../controllers/group/getAll";
+import { getAllGroups } from "../controllers/group/getAllGroups";
 import { getGroupByName } from "../controllers/group/getByName";
 import { getGroupsfromUser } from "../controllers/group/getByUser";
 import { Register } from "../controllers/group/register";
