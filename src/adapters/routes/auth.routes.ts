@@ -30,7 +30,7 @@ router.post(
   register
 );
 router.post("/login", loginUser);
-router.get("/renew", validateJwt, revalidateToken);
 router.put("/verify/:id", verifyEmail);
+router.get("/renew", validateJwt, revalidateToken);
 
 export default router;
