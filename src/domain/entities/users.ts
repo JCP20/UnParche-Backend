@@ -1,5 +1,5 @@
 export interface IUser {
-  id: number;
+  id: string;
   username: string;
   email: string;
   name: string;
@@ -10,6 +10,6 @@ export interface IUser {
 }
 
 export interface IPayloadJWT {
-  uid: string;
-  name: string;
+  id: string;
+  username: string;
 }

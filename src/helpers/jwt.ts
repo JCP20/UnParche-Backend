@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
 
-export class JWTGenerator {
+class JWTGenerator {
   private secret: string;
 
   constructor(secret: string) {
     this.secret = secret;
   }
 
-  public async generateToken(uid: string, name: string): Promise<string> {
-    const payload = { uid, name };
+  public async generateToken(id: string, username: string): Promise<string> {
+    const payload = { id, username };
 
     return new Promise((resolve, reject) => {
       jwt.sign(
@@ -20,9 +20,7 @@ export class JWTGenerator {
         (err: Error | null, token?: string) => {
           if (err) {
             console.error(err);
-            reject( 
-              new Error("An error has occurred, please contact an admin")
-            );
+            reject(new Error("An error has occurred, please contact an admin"));
           } else if (!token) {
             reject(new Error("Failed to generate JWT"));
           } else {
@@ -33,3 +31,5 @@ export class JWTGenerator {
     });
   }
 }
+
+export default new JWTGenerator(process.env.SECRET_JWT_SEED as string);

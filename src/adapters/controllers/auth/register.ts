@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { IUser } from "../../../domain/entities/users";
 import { sendEmail } from "../../../helpers/email";
 import { verificarUsuario } from "../../../helpers/emailTemplates/verifyUser";
-
+import JWTGenerator from "../../../helpers/jwt";
 
 export const register = async (req: Request, res: Response) => {
   //registro de usuario
@@ -68,9 +68,21 @@ export const register = async (req: Request, res: Response) => {
       )
     );
 
+    // Generate JWT
+    const token = await JWTGenerator.generateToken(
+      nuevoUsuario.id,
+      nuevoUsuario.username
+    );
+
     return res
       .status(201)
-      .json({ ok: true, mensaje: "Usuario registrado exitosamente" });
+      .json({
+        ok: true,
+        mensaje: "Usuario registrado exitosamente",
+        id: nuevoUsuario.id,
+        username: nuevoUsuario.username,
+        token,
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({

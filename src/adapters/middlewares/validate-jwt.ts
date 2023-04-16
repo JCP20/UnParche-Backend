@@ -17,12 +17,12 @@ export const validateJwt = (
   }
 
   try {
-    const { uid, name }: IPayloadJWT = jwt.verify(
+    const { id, username }: IPayloadJWT = jwt.verify(
       token,
       process.env.SECRET_JWT_SEED as string
     ) as IPayloadJWT;
-    req.body.id = uid;
-    req.body.name = name;
+    req.body.id = id;
+    req.body.username = username;
   } catch (error) {
     console.log(error);
     return res.status(401).json({ ok: false, msg: "Token is not valid" });
