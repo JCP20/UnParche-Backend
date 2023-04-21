@@ -1,14 +1,17 @@
 import GroupModel from "../../../models/Group.model";
+import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
 
 export const Update = async (req: Request, res: Response) => {
   const { category, name, description, members, administrators } = req.body;
   const groupId = req.params.id;
+  const userId = req.params.user;
   try {
     const existingGroup = await GroupModel.findOne({
       $or: [{ name }],
       _id: { $ne: groupId },
     });
+    
     //validaciones, mas adelante se haran con express validator
     const categories = [
       "Arte",
@@ -32,6 +35,11 @@ export const Update = async (req: Request, res: Response) => {
       return res
         .status(400)
         .json({ ok: false, msg: "El grupo no esta registrado" });
+    }
+    if(group.administrators != userId){
+      return res
+        .status(403)
+        .json({ ok: false, msg: "El usuario no es administrador del grupo a editar" });
     }
     group.category = category;
     group.name = name;
