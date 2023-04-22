@@ -12,10 +12,10 @@ const router = Router();
 
 router.get("/", getAllGroups);
 router.get("/:name", getGroupByName);
+
 router.post(
     "/register"
     ,[
-        // check("name", "El nombre es obligatorio").not().isEmpty(),
         check("name", "El name es obligatorio").not().isEmpty(),
         check("category", "Las categorias son obligatorias").not().isEmpty(),
         check("description", "La descripción es obligatoria").not().isEmpty(),
@@ -25,8 +25,26 @@ router.post(
       ],
       Register
 );
-router.put("/update/:groupId/:userId", Update);
+
+router.put(
+    "/update/:groupId/:userId"
+    ,[
+        check("groupId", "El id del grupo a actualizar es obligatorio").not().isEmpty(),
+        check("userId", "El id del usuario que va a realizar la actualización").not().isEmpty(),
+        validateFields,
+    ], 
+    Update
+);
+
 router.delete("/delete/:id", Delete);
-router.get("/your-groups/:userId", getGroupsfromUser);
+
+router.get(
+    "/your-groups/:userId"
+    ,[
+        check("userId","El id del usuario del que se quiere encontrar el grupo es obligatorio").not().isEmpty(),
+        validateFields
+    ], 
+    getGroupsfromUser
+);
 
 export default router;

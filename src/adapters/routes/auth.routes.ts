@@ -13,7 +13,6 @@ const router = Router();
 router.post(
   "/register",
   [
-    // check("name", "El nombre es obligatorio").not().isEmpty(),
     check("username", "El username es obligatorio").not().isEmpty(),
     check("email", "El email es obligatorio").isEmail(),
     check("password", "La contraseña no cumple con el estándar").custom(
@@ -29,7 +28,15 @@ router.post(
   ],
   register
 );
-router.post("/login", loginUser);
+router.post(
+  "/login"
+  ,[
+    check("email", "El email es obligatorio").isEmail().not().isEmpty(),
+    check("password", "La contraseña es obligatoria").not().isEmpty(),
+    validateFields,
+  ], 
+  loginUser
+);
 router.get("/renew", validateJwt, revalidateToken);
 router.put("/verify/:id", verifyEmail);
 
