@@ -5,7 +5,7 @@ import { getAllGroups } from "../controllers/group/getAllGroups";
 import { getGroupByName } from "../controllers/group/getByName";
 import { getGroupsfromUser } from "../controllers/group/getByUser";
 import { Register } from "../controllers/group/register";
-import { Update } from "../controllers/group/Update";
+import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 
 const router = Router();
@@ -25,8 +25,8 @@ router.post(
       ],
       Register
 );
-router.put("/update/:user", Update);
+router.put("/update/:groupId/:userId", Update);
 router.delete("/delete/:id", Delete);
-router.get("/your-groups/:user", getGroupsfromUser);
+router.get("/your-groups/:userId", getGroupsfromUser);
 
 export default router;

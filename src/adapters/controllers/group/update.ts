@@ -1,11 +1,11 @@
+import mongoose from "mongoose";
 import GroupModel from "../../../models/Group.model";
-import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
 
 export const Update = async (req: Request, res: Response) => {
   const { category, name, description, members, administrators } = req.body;
-  const groupId = req.params.id;
-  const userId = req.params.user;
+  const groupId = new mongoose.Types.ObjectId(req.params.groupId);
+  const userId = req.params.userId;
   try {
     const existingGroup = await GroupModel.findOne({
       $or: [{ name }],
@@ -46,7 +46,8 @@ export const Update = async (req: Request, res: Response) => {
     group.description = description;
     group.members = members;
     group.administrators = administrators;
-    await group.save();
+    await GroupModel.updateOne({"_id":groupId}, group);
+    
     return res.status(200).json({
       ok: true,
       msg: "Grupo actualizado",
