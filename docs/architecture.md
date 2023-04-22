@@ -16,26 +16,39 @@ DTOs y mappers para modelamiento de datos
 src/
 |-- adapters/
 |   |   |-- controllers/
-|   |   |   |-- user
-|   |   |   |   |-- getAll.ts
-|   |   |   |   |-- getByID.ts
+|   |   |   |-- auth
 |   |   |   |   |-- login.ts
 |   |   |   |   |-- register.ts
-|   |   |   |-- auth.controller.ts
+|   |   |   |   |-- revalidate.ts
+|   |   |   |   |-- verifyEmail.ts
+
+|   |   |   |-- group
+|   |   |   |   |-- delete.ts
+|   |   |   |   |-- getAllGroups.ts
+|   |   |   |   |-- getByName.ts
+|   |   |   |   |-- getByUser.ts
+|   |   |   |   |-- register.ts
+|   |   |   |   |-- update.ts
+|   |   |   |-- user
+|   |   |   |   |-- enrollGroup.ts
+|   |   |   |   |-- getAll.ts
+|   |   |   |   |-- getByID.ts
+|   |   |   |   |-- QuitGroup.ts
+|   |   |   |   |-- updateUser.ts
 |   |   |-- middlewares/
 |   |   |   |-- validate-fields.ts
 |   |   |   |-- validate-jwt.ts
 |   |   |-- routes/
-|   |   |   |-- userRoutes.ts
+|   |   |   |-- auth.routes.ts
+|   |   |   |-- group.routes.ts
+|   |   |   |-- user.routes.ts
 |-- config/
 |   |-- config.ts
 |   |-- database.ts
 |-- domain/
 |   |-- entities/
-|   |   |-- User.ts
-|   |   |-- Group.ts
-|   |-- interfaces/
-|   |   |-- UserModel.ts
+|   |   |-- users.ts
+|   |   |-- groups.ts
 |-- helpers/
 |   |-- emailTemplates/
 |   |   |-- verifyUser.ts
@@ -43,5 +56,6 @@ src/
 |   |-- email.ts
 |   |-- customChecks.ts
 |-- models/
-|   |-- userModel.ts
-|-- main.ts
+|   |-- User.model.ts
+|   |-- Group.model.ts
+|-- index.ts
