@@ -15,15 +15,6 @@ export const loginUser = async (req: Request, res: Response) => {
      * por ahora se implementa sólo con email,
      * luego miramos cómo hacerlo para usuario
      */
-
-    if (!email || !password) {
-      //Se verifica que estén los datos pedidos
-      return res.status(400).json({
-        ok: false,
-        msg: "Por favor, proporcione todos los datos requeridos",
-      });
-    }
-
     if (!currentUser) {
       //Se verifica que el nombre de usuario o correo correspondan a algun usuario registrado
       return res

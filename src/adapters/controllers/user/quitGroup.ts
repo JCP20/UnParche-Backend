@@ -18,16 +18,20 @@ export const quitGroup = async (req: Request, res: Response) => {
         return res.status(404).json({ ok: false, msg: "Grupo no encontrado" });
       }
 
+    // Check if the group is already in the user's groups
+    const index = user.groups.indexOf(group.id);
+    if (index !== -1) {
       // Remove the group from the user's groups
-      if (user.groups.includes(group.id)) {
-        console.log(user.groups)
-          /*
-        user.groups = user.groups.filter((groupId) => groupId !== group.id);
-          */
-        await user.save();
-      }
+
+      user.groups.splice(index, 1);
+
+      console.log(user.groups);
+    } else {
+      return res.status(400).json({ ok: false, msg: "El usuario no esta inscrito en este grupo" });
+    }
+
   
-      return res.json({ ok: true, msg: "Grupo eliminado del usuario" });
+      return res.json({ ok: true, msg: "Usuario eliminado del grupo" });
 
     } catch (err) {
       console.log(err);

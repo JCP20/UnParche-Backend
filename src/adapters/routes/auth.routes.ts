@@ -7,9 +7,7 @@ import { register } from "../controllers/auth/register";
 import { revalidateToken } from "../controllers/auth/revalidate";
 import { validateJwt } from "../middlewares/validate-jwt";
 import { verifyEmail } from "../controllers/auth/verifyEmail";
-
 const router = Router();
-
 router.post(
   "/register",
   [
@@ -29,7 +27,12 @@ router.post(
   ],
   register
 );
-router.post("/login", loginUser);
+router.post("/login", 
+[
+  check("email", "El correo es obligatorio").notEmpty(),
+  check("password", "La contraseña es obligatoria").notEmpty(),
+],
+loginUser);
 router.get("/renew", validateJwt, revalidateToken);
 router.put("/verify/:id", verifyEmail);
 

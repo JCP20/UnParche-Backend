@@ -6,7 +6,7 @@ import cors from "cors";
 import userRoutes from "./adapters/routes/user.routes";
 import authRoutes from "./adapters/routes/auth.routes";
 import Database from "./config/database";
-import groupsRoutes from "./adapters/routes/groups.routes";
+import groupsRoutes from "./adapters/routes/group.routes";
 
 const app = express();
 
