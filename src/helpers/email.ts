@@ -7,14 +7,13 @@ export interface IEmailSender {
 export class NodemailerEmailSender implements IEmailSender {
   private transporter: nodemailer.Transporter;
 
-  // TODO Poner los datos de autenticación como variables de entorno o en archivo de configuraciñon
   constructor() {
     this.transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
       auth: {
-        user: "unparcheadm@gmail.com",
-        pass: "iecnfzzqflvevlsf",
+        user: process.env.EMAIL_HOST_USER ?? "",
+        pass: process.env.EMAIL_HOST_PASSWORD ?? "",
       },
     });
   }

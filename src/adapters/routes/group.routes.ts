@@ -1,3 +1,8 @@
+/*
+    This file is responsible for the routes of the group module
+    /groups
+*/
+
 import { Router } from "express";
 import { check } from "express-validator";
 import { Delete } from "../controllers/group/delete";
@@ -13,17 +18,19 @@ const router = Router();
 router.get("/", getAllGroups);
 router.get("/:name", getGroupByName);
 router.post(
-    "/register"
-    ,[
-        // check("name", "El nombre es obligatorio").not().isEmpty(),
-        check("name", "El name es obligatorio").not().isEmpty(),
-        check("category", "Las categorias son obligatorias").not().isEmpty(),
-        check("description", "La descripción es obligatoria").not().isEmpty(),
-        check("members", "Los miembros del grupo son obligatorios").not().isEmpty(),
-        check("administrators", "El administrador del grupo es obligatorio").not().isEmpty(),
-        validateFields,
-      ],
-      Register
+  "/register",
+  [
+    // check("name", "El nombre es obligatorio").not().isEmpty(),
+    check("name", "El name es obligatorio").not().isEmpty(),
+    check("category", "Las categorias son obligatorias").not().isEmpty(),
+    check("description", "La descripción es obligatoria").not().isEmpty(),
+    check("members", "Los miembros del grupo son obligatorios").not().isEmpty(),
+    check("administrators", "El administrador del grupo es obligatorio")
+      .not()
+      .isEmpty(),
+    validateFields,
+  ],
+  Register
 );
 router.put("/update/:id", Update);
 router.delete("/delete/:id", Delete);

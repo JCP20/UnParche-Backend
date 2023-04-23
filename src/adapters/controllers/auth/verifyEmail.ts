@@ -6,23 +6,30 @@ export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const userUpdated = await UserModel.findByIdAndUpdate(id, {
-      verified: req.body.verified,
+      verified: true,
     });
 
     if (userUpdated) {
-      // Generate JWT
-      const token = await JWTGenerator.generateToken(
-        userUpdated.id,
-        userUpdated.username
-      );
+      const accessToken = await JWTGenerator.generateAccessToken({
+        id: userUpdated.id,
+        username: userUpdated.username,
+      });
 
-      return res
-        .status(200)
-        .json({
-          ok: true,
-          msg: "Verificación exitosa",
-          data: { token, id: userUpdated.id, username: userUpdated.username },
-        });
+      const refresh = await JWTGenerator.generateRefreshToken({
+        id: userUpdated.id,
+        username: userUpdated.username,
+      });
+
+      return res.status(200).json({
+        ok: true,
+        msg: "Verificación exitosa",
+        data: {
+          id: userUpdated.id,
+          username: userUpdated.username,
+          token: accessToken,
+          refresh,
+        },
+      });
     } else {
       return res.status(404).json({ ok: false, msg: "User not found" });
     }

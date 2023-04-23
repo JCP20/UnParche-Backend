@@ -1,28 +1,33 @@
 import jwt from "jsonwebtoken";
+import { config } from "dotenv";
 
 class JWTGenerator {
-  private secret: string;
+  private secretAccess: string;
+  private secretRefresh: string;
 
-  constructor(secret: string) {
-    this.secret = secret;
+  constructor() {
+    this.secretAccess = process.env.SECRET_JWT_SEED_ACCESS || "";
+    this.secretRefresh = process.env.SECRET_JWT_SEED_REFRESH || "";
   }
 
-  public async generateToken(id: string, username: string): Promise<string> {
-    const payload = { id, username };
-
+  private async generateToken(
+    payload: object,
+    secret: string,
+    expiresIn: string
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       jwt.sign(
         payload,
-        this.secret,
+        secret,
         {
-          expiresIn: "1d",
+          expiresIn: expiresIn,
         },
         (err: Error | null, token?: string) => {
           if (err) {
             console.error(err);
             reject(new Error("An error has occurred, please contact an admin"));
           } else if (!token) {
-            reject(new Error("Failed to generate JWT"));
+            reject(new Error("Failed to generate token"));
           } else {
             resolve(token);
           }
@@ -30,6 +35,22 @@ class JWTGenerator {
       );
     });
   }
+
+  public async generateAccessToken(payload: {
+    id: string;
+    username: string;
+  }): Promise<string> {
+    return this.generateToken(payload, this.secretAccess, "15m");
+  }
+
+  public async generateRefreshToken(payload: {
+    id: string;
+    username: string;
+  }): Promise<string> {
+    return this.generateToken(payload, this.secretRefresh, "1d");
+  }
 }
 
-export default new JWTGenerator(process.env.SECRET_JWT_SEED as string);
+config();
+
+export default new JWTGenerator();

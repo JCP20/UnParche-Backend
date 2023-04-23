@@ -1,3 +1,8 @@
+/*
+    This file is responsible for the routes of the user module
+    /users
+*/
+
 import { Router } from "express";
 import { getAllUsers } from "../controllers/user/getAll";
 import { getUserById } from "../controllers/user/getByID";
