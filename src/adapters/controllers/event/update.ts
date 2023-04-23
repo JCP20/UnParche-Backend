@@ -1,8 +1,25 @@
 import EventModel from "../../../models/Event.model";
 import { Request, Response } from "express";
+import { check, validationResult } from "express-validator";
 
 export const Update = async (req: Request, res: Response) => {
-    const {id_group, title, date, schedule, description} = req.body;
+  const reglasValidacion = [
+    check('id_group').notEmpty().withMessage('El id del evento es requerido'),
+    check('title').notEmpty().withMessage('El nombre del evento es requerido'),
+    check('date').notEmpty().withMessage('La fecha del evento es requerida'),
+    check('date').isDate().withMessage('La fecha del evento no ess válida'),
+    check('schedule').notEmpty().withMessage('El horario del evento es requerido'),
+    check('description').notEmpty().withMessage('La descripción del evento es requerida')
+  ];
+
+  // Verificar errores de validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // Si hay errores, retornar una respuesta con los errores
+    return res.status(400).json({ ok:false, errores: errors.array() });
+  }  
+  
+  const {id_group, title, date, schedule, description} = req.body;
     const eventId = req.params.id;
     try {
       const eventoExistente = await EventModel.findOne({
