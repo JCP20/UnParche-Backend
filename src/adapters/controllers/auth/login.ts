@@ -10,13 +10,6 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const currentUser: IUser | null = await UserModel.findOne({ email });
 
-<<<<<<< HEAD
-=======
-    /** Se debe especificar si de ha dado el correo o el nombre de usuario,
-     * por ahora se implementa sólo con email,
-     * luego miramos cómo hacerlo para usuario
-     */
->>>>>>> UNP-20-Unirse_grupos
     if (!currentUser) {
       //Se verifica que el nombre de usuario exista
       return res
