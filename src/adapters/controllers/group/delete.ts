@@ -9,7 +9,7 @@ export const Delete = async (req: Request, res: Response) => {
     // Verifica si existe un usuario con el ID proporcionado
     const usuarioExistente: IGroup | null = await GroupModel.findById(id);
     if (!usuarioExistente) {
-      return res.status(400).json({ mensaje: "El usuario no existe" });
+      return res.status(400).json({ mensaje: "El grupo no existe" });
     }
 
     // Elimina el usuario de la base de datos
@@ -17,14 +17,14 @@ export const Delete = async (req: Request, res: Response) => {
 
     res
       .status(200)
-      .json({ ok: true, mensaje: "Usuario eliminado exitosamente" });
+      .json({ ok: true, mensaje: "Grupo eliminado exitosamente" });
   } catch (error) {
     console.error(error);
     res
       .status(500)
       .json({
         ok: false,
-        mensaje: "Ocurrió un error en el servidor al eliminar el usuario",
+        mensaje: "Ocurrió un error en el servidor al eliminar el grupo",
       });
   }
 };
