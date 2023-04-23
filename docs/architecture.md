@@ -43,7 +43,6 @@ src/
 |   |   |   |-- group.routes.ts
 |   |   |   |-- user.routes.ts
 |-- config/
-|   |-- config.ts
 |   |-- database.ts
 |-- domain/
 |   |-- entities/
@@ -58,4 +57,8 @@ src/
 |-- models/
 |   |-- User.model.ts
 |   |-- Group.model.ts
+|-- validators/
+|   |-- groups.ts
+|   |-- users.ts
+|-- app.ts
 |-- index.ts
