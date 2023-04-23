@@ -14,7 +14,6 @@ import { verifyEmail } from "../controllers/auth/verifyEmail";
 import { isValidEmail } from "../../helpers/customChecks";
 
 const router = Router();
-
 router.post(
   "/register",
   [

@@ -24,7 +24,6 @@ router.post(
     check("name", "El name es obligatorio").not().isEmpty(),
     check("category", "Las categorias son obligatorias").not().isEmpty(),
     check("description", "La descripción es obligatoria").not().isEmpty(),
-    check("members", "Los miembros del grupo son obligatorios").not().isEmpty(),
     check("administrators", "El administrador del grupo es obligatorio")
       .not()
       .isEmpty(),

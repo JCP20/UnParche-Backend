@@ -5,6 +5,7 @@ export interface IUser {
   name: string;
   password: string;
   verified: boolean;
+  groups: string[];
   createdAt: string;
   updatedAt: string;
 }

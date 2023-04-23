@@ -13,8 +13,8 @@ export const Update = async (req: Request, res: Response) => {
     const categories = [
       "Arte",
       "Deporte",
-      "Religion",
-      "Investigacion",
+      "Religión",
+      "Investigación",
       "Semillero",
       "Videojuegos",
       "Otro",
