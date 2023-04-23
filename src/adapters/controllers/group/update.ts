@@ -36,7 +36,9 @@ export const Update = async (req: Request, res: Response) => {
         .status(400)
         .json({ ok: false, msg: "El grupo no esta registrado" });
     }
-    if(group.administrators != userId){
+
+    const index = group.administrators.indexOf(userId);
+    if(index === -1){
       return res
         .status(403)
         .json({ ok: false, msg: "El usuario no es administrador del grupo a editar" });

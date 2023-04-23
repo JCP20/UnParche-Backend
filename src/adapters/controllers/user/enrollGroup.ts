@@ -30,7 +30,10 @@ export const enrollGroup = async (req: Request, res: Response) => {
       // Agregar el grupo a la lista de grupos del usuario
       user.groups.push(group._id.toString());
       await user.save();
-  
+      //Agregar el usuario a la lista de miembros del grupo
+      group.members.push(user._id.toString());
+      await group.save();
+      console.log(group.members);
       return res.json({ ok: true, msg: "Usuario inscrito correctamente en el grupo" });
 
     } catch (err) {
