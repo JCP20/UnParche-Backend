@@ -15,10 +15,10 @@ const router = Router();
 router.get("/:id", getUserById);
 
 // Middleware to validate JWT for all next routes
-//router.use(validateJwt);
+router.use(validateJwt);
 router.get("/", getAllUsers);
-router.put('/enroll', enrollGroup);
+router.put("/enroll", enrollGroup);
 router.put("/quit", quitGroup);
 router.put("/:id", updateUser);
- 
+
 export default router;
