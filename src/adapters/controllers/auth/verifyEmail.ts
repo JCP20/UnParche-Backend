@@ -15,9 +15,20 @@ export const verifyEmail = async (req: Request, res: Response) => {
         username: userUpdated.username,
       });
 
-      const refresh = await JWTGenerator.generateRefreshToken({
+      const refreshToken = await JWTGenerator.generateRefreshToken({
         id: userUpdated.id,
         username: userUpdated.username,
+      });
+
+      userUpdated.refreshToken = refreshToken;
+
+      await userUpdated.save();
+
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24,
       });
 
       return res.status(200).json({
@@ -27,7 +38,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
           id: userUpdated.id,
           username: userUpdated.username,
           token: accessToken,
-          refresh,
         },
       });
     } else {

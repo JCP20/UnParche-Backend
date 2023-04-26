@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 // db type
 import Database from "./config/database";
@@ -23,6 +24,7 @@ export class App {
 
   private useMiddlewares(): void {
     this.app.use(cors());
+    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(morgan("tiny"));
   }

@@ -4,9 +4,12 @@ import bcrypt from "bcrypt";
 import { IUser } from "../../../domain/entities/users";
 import { sendEmail } from "../../../helpers/email";
 import { verificarUsuario } from "../../../helpers/emailTemplates/verifyUser";
+import { startSession } from "mongoose";
 
+//registro de usuario
 export const register = async (req: Request, res: Response) => {
-  //registro de usuario
+  const session = await startSession();
+  session.startTransaction();
   try {
     // Validar existencia de la información del usuario
     const { email, password, username } = req.body;
@@ -44,7 +47,7 @@ export const register = async (req: Request, res: Response) => {
       verified: false,
     });
 
-    await nuevoUsuario.save();
+    await nuevoUsuario.save({ session });
 
     await sendEmail(
       nuevoUsuario.email,
@@ -55,12 +58,17 @@ export const register = async (req: Request, res: Response) => {
       )
     );
 
+    await session.commitTransaction();
+    session.endSession();
+
     return res.status(201).json({
       ok: true,
       mensaje: "Usuario registrado exitosamente",
     });
   } catch (error) {
     console.error(error);
+    await session.abortTransaction();
+    session.endSession();
     res.status(500).json({
       ok: false,
       msg: "Ocurrió un error en el servidor al registrar el usuario",

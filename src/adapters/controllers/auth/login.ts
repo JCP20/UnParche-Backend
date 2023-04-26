@@ -1,14 +1,17 @@
 import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { IUser } from "../../../domain/entities/users";
 import JWTGenerator from "../../../helpers/jwt";
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
+    const cookies = req.cookies;
+
+    console.log(`cookies available at login: ${JSON.stringify(cookies)}`);
+
     const { email, password } = req.body;
 
-    const currentUser: IUser | null = await UserModel.findOne({ email });
+    const currentUser = await UserModel.findOne({ email });
 
     if (!currentUser) {
       //Se verifica que el nombre de usuario exista
@@ -35,14 +38,26 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
+    // Generate JWTs
     const accessToken = await JWTGenerator.generateAccessToken({
       id: currentUser.id,
       username: currentUser.username,
     });
 
-    const refresh = await JWTGenerator.generateRefreshToken({
+    const refreshToken = await JWTGenerator.generateRefreshToken({
       id: currentUser.id,
       username: currentUser.username,
+    });
+
+    currentUser.refreshToken = refreshToken;
+
+    await currentUser.save();
+
+    res.cookie("jwt", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24,
     });
 
     return res.status(200).json({
@@ -51,7 +66,6 @@ export const loginUser = async (req: Request, res: Response) => {
       id: currentUser.id,
       username: currentUser.username,
       token: accessToken,
-      refresh,
     });
   } catch (error) {
     return res.status(500).json({

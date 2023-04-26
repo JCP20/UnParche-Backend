@@ -8,10 +8,10 @@ import { check } from "express-validator";
 import { validateFields } from "../middlewares/validate-fields";
 import { loginUser } from "../controllers/auth/login";
 import { register } from "../controllers/auth/register";
-import { revalidateToken } from "../controllers/auth/revalidate";
-// import { validateJwt } from "../middlewares/validate-jwt";
+import { revalidateToken } from "../controllers/auth/renew";
 import { verifyEmail } from "../controllers/auth/verifyEmail";
 import { isValidEmail } from "../../helpers/customChecks";
+import { logoutUser } from "../controllers/auth/logout";
 
 const router = Router();
 router.post(
@@ -36,6 +36,7 @@ router.post(
   loginUser
 );
 
+router.get("/logout", logoutUser);
 router.put("/verify/:id", verifyEmail);
 router.get("/renew", revalidateToken);
 
