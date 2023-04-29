@@ -7,8 +7,6 @@ export const getByUser = async (req: Request, res: Response) => {
   try {
     const { id_user, act_date } = req.query;
 
-    console.log(id_user);
-
     if (id_user !== undefined && id_user !== null && id_user !== "") {
       const user = await UserModel.findOne({ username: id_user });
       if (user) {
@@ -45,7 +43,6 @@ export const getByUser = async (req: Request, res: Response) => {
                             highlights: event.highlights
                         };
                     });
-                    console.log(formatEvents);
                     return res.status(200).json({ ok: true, data: formatEvents });
             
                 }
@@ -60,13 +57,14 @@ export const getByUser = async (req: Request, res: Response) => {
                     return {
                         id_group: event.id_group.name,
                         title: event.title,
-                        date: event.date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }),
+                        date: event.date
+                        //.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
+                        ,
                         schedule: event.schedule,
                         description: event.description,
                         highlights: event.highlights
                     };
                   });
-                console.log(formatEvents);
                 return res.status(200).json({ ok: true, data: formatEvents });
             }
         } else {
