@@ -7,6 +7,7 @@ import userRoutes from "./adapters/routes/user.routes";
 import authRoutes from "./adapters/routes/auth.routes";
 import Database from "./config/database";
 import groupsRoutes from "./adapters/routes/groups.routes";
+import eventRoutes from "./adapters/routes/event.routes"
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/groups", groupsRoutes);
+app.use("/event", eventRoutes);
 
 // Connect to database and start server
 (async () => {
