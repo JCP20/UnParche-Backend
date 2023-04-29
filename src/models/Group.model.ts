@@ -5,11 +5,11 @@ const groupSchema = new Schema(
     {
       category: {
         type: String,
-        enum: ['Arte', 'Deporte', 'Religion','Investigacion', 'Semillero', 'Videojuegos', 'Otro']
+        enum: ['Arte', 'Deporte', 'Religión','Investigación', 'Semillero', 'Videojuegos', 'Otro']
     },
       name: { type: String, required: true, unique: true },
       description: { type: String, required: true },
-      members: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+      members: [{ type: Schema.Types.ObjectId, ref: 'User', required: false }],
       administrators: [{ type: Schema.Types.ObjectId, ref: 'User' }]
     },
     {

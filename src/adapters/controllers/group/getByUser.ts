@@ -1,10 +1,11 @@
+import mongoose from "mongoose";
 import GroupModel from "../../../models/Group.model";
 import { Request, Response} from "express";
 
 export const getGroupsfromUser = async (req: Request, res: Response) => {
     try {
       // retornar los grupos dado el usuario
-      const current_user = req.params.user;
+      const current_user = new mongoose.Types.ObjectId(req.params.userId);
       const user_groups = await GroupModel.find({members:current_user});
       if (user_groups) {
         return res.status(200).json({ ok: true, data: user_groups });

@@ -16,8 +16,8 @@ export const Register = async (req: Request, res: Response) => {
     const categories = [
       "Arte",
       "Deporte",
-      "Religion",
-      "Investigacion",
+      "Religión",
+      "Investigación",
       "Semillero",
       "Videojuegos",
       "Otro",
@@ -43,7 +43,7 @@ export const Register = async (req: Request, res: Response) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({
-      ok: true,
+      ok: false,
       msg: "Error en registro de grupo",
     });
   }
