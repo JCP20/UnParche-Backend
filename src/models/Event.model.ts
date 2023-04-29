@@ -3,7 +3,6 @@ import { IEvent } from "../domain/entities/events";
 
 const userSchema = new Schema(
   {
-    id_event: { type: Number, required: true, unique: true},
     id_group: { type: Schema.Types.ObjectId, ref: 'Group' },
     title: { type: String, required: true},
     date: { type: Date, required: true},
