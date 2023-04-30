@@ -57,9 +57,7 @@ export const getByUser = async (req: Request, res: Response) => {
                     return {
                         id_group: event.id_group.name,
                         title: event.title,
-                        date: event.date
-                        //.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' })
-                        ,
+                        date: event.date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }),
                         schedule: event.schedule,
                         description: event.description,
                         highlights: event.highlights
