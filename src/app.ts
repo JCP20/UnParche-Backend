@@ -10,6 +10,7 @@ import Database from "./config/database";
 import authRoutes from "./adapters/routes/auth.routes";
 import userRoutes from "./adapters/routes/user.routes";
 import groupRoutes from "./adapters/routes/group.routes";
+import eventRoutes from "./adapters/routes/event.routes";
 
 export class App {
   private readonly app: Express;
@@ -33,6 +34,7 @@ export class App {
     this.app.use("/auth", authRoutes);
     this.app.use("/users", userRoutes);
     this.app.use("/groups", groupRoutes);
+    this.app.use("/events", eventRoutes);
   }
 
   public async start(): Promise<void> {

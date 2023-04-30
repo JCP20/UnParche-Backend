@@ -9,6 +9,7 @@ import { Delete } from "../controllers/group/delete";
 import { getAllGroups } from "../controllers/group/getAllGroups";
 import { getGroupByName } from "../controllers/group/getByName";
 import { getGroupsfromUser } from "../controllers/group/getByUser";
+import { getGroupsfromAdmin } from "../controllers/group/getByAdmin";
 import { Register } from "../controllers/group/register";
 import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
@@ -63,6 +64,20 @@ router.get(
     validateFields,
   ],
   getGroupsfromUser
+);
+
+router.get(
+  "/your-groups-admin/:userId",
+  [
+    check(
+      "userId",
+      "El id del usuario administrador del que se quiere encontrar el grupo es obligatorio"
+    )
+      .not()
+      .isEmpty(),
+    validateFields,
+  ],
+  getGroupsfromAdmin
 );
 
 export default router;
