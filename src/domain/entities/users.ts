@@ -11,6 +11,8 @@ export interface IUser {
   refreshToken: string;
   createdAt: string;
   updatedAt: string;
+  preferredCategories: string[];
+
 }
 
 export interface IPayloadJWT {

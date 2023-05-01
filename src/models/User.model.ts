@@ -9,6 +9,8 @@ const userSchema = new Schema(
     verified: { type: Boolean, required: true },
     groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],
     refreshToken: { type: String, default: "" },
+    preferredCategories: [{ type: String }],
+
   },
   {
     timestamps: true,
