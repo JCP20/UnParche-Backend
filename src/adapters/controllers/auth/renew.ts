@@ -7,6 +7,8 @@ export const revalidateToken = async (req: Request, res: Response) => {
   try {
     const cookies = req.cookies;
 
+    console.log(cookies);
+
     if (!cookies?.jwt) {
       return res.status(401).json({ ok: false, msg: "Unauthorized" });
     }
@@ -14,7 +16,11 @@ export const revalidateToken = async (req: Request, res: Response) => {
     const refreshToken = cookies.jwt;
 
     // Clean last refresh token
-    res.clearCookie("jwt", { httpOnly: true, sameSite: "none", secure: true });
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      // sameSite: "none",
+      // secure: true,
+    });
 
     const foundUser = await UserModel.findOne({ refreshToken });
 
@@ -71,8 +77,8 @@ export const revalidateToken = async (req: Request, res: Response) => {
 
         res.cookie("jwt", newRefreshToken, {
           httpOnly: true,
-          secure: true,
-          sameSite: "none",
+          // secure: true,
+          // sameSite: "none",
           maxAge: 1000 * 60 * 60 * 24,
         });
 

@@ -19,7 +19,7 @@ router.post(
   [
     check("username", "El username es obligatorio").not().isEmpty(),
     check("email", "El email es obligatorio").not().isEmpty().isEmail(),
-    check("email", "El email no es institucional").custom(isValidEmail),
+    // check("email", "El email no es institucional").custom(isValidEmail),
     check("password", "La contraseña es obligatoria").not().isEmpty(),
     validateFields,
   ],

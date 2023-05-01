@@ -2,6 +2,8 @@ import express, { Express } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import { corsOptions } from "./config/cors";
+// import { credentials } from "./adapters/middlewares/credentials";
 
 // db type
 import Database from "./config/database";
@@ -10,6 +12,8 @@ import Database from "./config/database";
 import authRoutes from "./adapters/routes/auth.routes";
 import userRoutes from "./adapters/routes/user.routes";
 import groupRoutes from "./adapters/routes/group.routes";
+import conversationRoutes from "./adapters/routes/conversation.routes";
+import messageRoutes from "./adapters/routes/message.routes";
 
 export class App {
   private readonly app: Express;
@@ -23,16 +27,20 @@ export class App {
   }
 
   private useMiddlewares(): void {
-    this.app.use(cors());
-    this.app.use(cookieParser());
+    // this.app.use(credentials);
+    this.app.use(cors(corsOptions));
+    this.app.use(express.urlencoded({ extended: false }));
     this.app.use(express.json());
     this.app.use(morgan("tiny"));
+    this.app.use(cookieParser());
   }
 
   private useRoutes(): void {
     this.app.use("/auth", authRoutes);
     this.app.use("/users", userRoutes);
     this.app.use("/groups", groupRoutes);
+    this.app.use("/conversation", conversationRoutes);
+    this.app.use("/message", messageRoutes);
   }
 
   public async start(): Promise<void> {

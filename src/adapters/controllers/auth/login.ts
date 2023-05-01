@@ -7,8 +7,6 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const cookies = req.cookies;
 
-    console.log(`cookies available at login: ${JSON.stringify(cookies)}`);
-
     const { email, password } = req.body;
 
     const currentUser = await UserModel.findOne({ email });
@@ -55,8 +53,8 @@ export const loginUser = async (req: Request, res: Response) => {
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      // secure: true,
+      // sameSite: "none",
       maxAge: 1000 * 60 * 60 * 24,
     });
 

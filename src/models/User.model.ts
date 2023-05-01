@@ -9,6 +9,7 @@ const userSchema = new Schema(
     verified: { type: Boolean, required: true },
     groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],
     refreshToken: { type: String, default: "" },
+    role: { type: String, enum: ["admin", "user"], default: "user" },
   },
   {
     timestamps: true,

@@ -10,8 +10,10 @@ config();
 // Create db instance
 const mongoDb = new Database();
 
+const server = express();
+
 // Create app instance
-const app = new App(process.env.PORT ?? "4000", mongoDb, express());
+const app = new App(process.env.PORT ?? "4000", mongoDb, server);
 
 // Start server
 app.start();
