@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Message from "../../../models/Message";
+import Message from "../../../models/Message.model";
 
 export const newMessage = async (req: Request, res: Response) => {
   const newMessage = new Message(req.body);

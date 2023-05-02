@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Conversation from "../../../models/Conversation";
+import Conversation from "../../../models/Conversation.model";
 
 export const newConversation = async (req: Request, res: Response) => {
   const newConversation = new Conversation({

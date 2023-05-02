@@ -9,6 +9,7 @@ export interface IUser {
   verified: boolean;
   groups: string[];
   refreshToken: string;
+  role: string;
   createdAt: string;
   updatedAt: string;
 }
