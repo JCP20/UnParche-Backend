@@ -22,6 +22,13 @@ export const register = async (req: Request, res: Response) => {
         msg: "Ya existe un usuario con ese correo electrónico",
       });
     }
+    const passwordRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        ok: false,
+        msg: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
+      });
+    }
 
     //verificar si ya existe usuario con el mismo username
     const usernameExistente: IUser | null = await UserModel.findOne({
