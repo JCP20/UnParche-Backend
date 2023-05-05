@@ -12,6 +12,8 @@ export interface IUser {
   role: string;
   createdAt: string;
   updatedAt: string;
+  preferredCategories: string[];
+
 }
 
 export interface IPayloadJWT {

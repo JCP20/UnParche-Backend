@@ -12,7 +12,7 @@ export const register = async (req: Request, res: Response) => {
   session.startTransaction();
   try {
     // Validar existencia de la información del usuario
-    const { email, password, username } = req.body;
+    const { email, password, username, categories } = req.body;
     // Verificar si ya existe un usuario con el correo electrónico proporcionado
     const usuarioExistente: IUser | null = await UserModel.findOne({ email });
 
@@ -34,7 +34,26 @@ export const register = async (req: Request, res: Response) => {
         msg: "Ya existe un usuario con ese nombre de usuario",
       });
     }
-
+    const possibleCategories = [
+      "Arte",
+      "Deporte",
+      "Religión",
+      "Investigación",
+      "Semillero",
+      "Videojuegos",
+      "Otro",
+    ];
+  
+    const todasCategoriasValidas = categories.every((categories: string) =>
+      possibleCategories.includes(categories)
+    );
+    
+    if (!todasCategoriasValidas) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Una o más categorías proporcionadas no son válidas",
+      });
+    }
     // Encriptar contraseña
     const salt: string = await bcrypt.genSalt(10);
     const passwordCrypt: string = await bcrypt.hash(password, salt);
@@ -45,6 +64,7 @@ export const register = async (req: Request, res: Response) => {
       username,
       password: passwordCrypt,
       verified: false,
+      preferredCategories: categories,
     });
 
     await nuevoUsuario.save({ session });
