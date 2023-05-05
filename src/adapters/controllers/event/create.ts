@@ -7,7 +7,9 @@ export const createEvent = async (req: Request, res: Response) => {
 
     const savedEvent = await newEvent.save();
 
-    return { ok: true, msg: "Event created", data: savedEvent };
+    return res
+      .status(200)
+      .json({ ok: true, msg: "Event created", data: savedEvent });
   } catch (err) {
     console.log(err);
     return res
