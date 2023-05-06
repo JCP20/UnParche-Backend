@@ -10,6 +10,7 @@ import { getAllGroups } from "../controllers/group/getAllGroups";
 import { getGroupByName } from "../controllers/group/getByName";
 import { getGroupsfromUser } from "../controllers/group/getByUser";
 import { getGroupsfromAdmin } from "../controllers/group/getByAdmin";
+import { getUsersFromGroup } from "../controllers/group/getUsers";
 import { Register } from "../controllers/group/register";
 import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
@@ -78,6 +79,19 @@ router.get(
     validateFields,
   ],
   getGroupsfromAdmin
+);
+
+router.get(
+  "/users/:groupId",
+  [
+    check(
+      "groupId", "El id del grupo es obligatorio"
+    )
+      .not()
+      .isEmpty(),
+    validateFields,
+  ],
+  getUsersFromGroup
 );
 
 export default router;
