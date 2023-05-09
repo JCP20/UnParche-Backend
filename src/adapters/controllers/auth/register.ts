@@ -22,13 +22,13 @@ export const register = async (req: Request, res: Response) => {
         msg: "Ya existe un usuario con ese correo electrónico",
       });
     }
-    const passwordRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({
-        ok: false,
-        msg: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
-      });
-    }
+    // const passwordRegex = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    // if (!passwordRegex.test(password)) {
+    //   return res.status(400).json({
+    //     ok: false,
+    //     msg: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
+    //   });
+    // }
 
     //verificar si ya existe usuario con el mismo username
     const usernameExistente: IUser | null = await UserModel.findOne({
@@ -50,17 +50,17 @@ export const register = async (req: Request, res: Response) => {
       "Videojuegos",
       "Otro",
     ];
-  
-    const todasCategoriasValidas = categories.every((categories: string) =>
-      possibleCategories.includes(categories)
-    );
-    
-    if (!todasCategoriasValidas) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Una o más categorías proporcionadas no son válidas",
-      });
-    }
+
+    // const todasCategoriasValidas = categories.every((categories: string) =>
+    //   possibleCategories.includes(categories)
+    // );
+
+    // if (!todasCategoriasValidas) {
+    //   return res.status(400).json({
+    //     ok: false,
+    //     msg: "Una o más categorías proporcionadas no son válidas",
+    //   });
+    // }
     // Encriptar contraseña
     const salt: string = await bcrypt.genSalt(10);
     const passwordCrypt: string = await bcrypt.hash(password, salt);
@@ -71,7 +71,7 @@ export const register = async (req: Request, res: Response) => {
       username,
       password: passwordCrypt,
       verified: false,
-      preferredCategories: categories,
+      // preferredCategories: categories,
     });
 
     await nuevoUsuario.save({ session });
@@ -81,7 +81,7 @@ export const register = async (req: Request, res: Response) => {
       "[UNParche] Verifica tu correo electrónico",
       verificarUsuario(
         nuevoUsuario.username,
-        `${process.env.APP_URL}/verificar/${nuevoUsuario.id}`
+        `${process.env.APP_URL}/verification/${nuevoUsuario.id}`
       )
     );
 

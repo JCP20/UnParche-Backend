@@ -5,7 +5,9 @@ export const updateEvent = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const actualEvent = Event.findByIdAndUpdate(id, req.body);
+    const actualEvent = await Event.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
     if (!actualEvent) {
       return res

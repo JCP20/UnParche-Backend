@@ -1,12 +1,16 @@
 import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
 
-
 export const getUserById = async (req: Request, res: Response) => {
   try {
     // Obtener un usuario por su id
     const { id } = req.params;
-    const usuario = await UserModel.findById(id);
+    // exclude username prop from the query
+
+    const usuario = await UserModel.findById(id, {
+      refreshToken: 0,
+      password: 0,
+    }).populate("groups");
     if (usuario) {
       return res.status(200).json({ ok: true, data: usuario });
     } else {

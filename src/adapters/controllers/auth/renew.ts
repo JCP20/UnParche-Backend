@@ -7,8 +7,6 @@ export const revalidateToken = async (req: Request, res: Response) => {
   try {
     const cookies = req.cookies;
 
-    console.log(cookies);
-
     if (!cookies?.jwt) {
       return res.status(401).json({ ok: false, msg: "Unauthorized" });
     }
@@ -84,6 +82,9 @@ export const revalidateToken = async (req: Request, res: Response) => {
 
         return res.status(200).json({
           ok: true,
+          msg: "Token refreshed",
+          id: foundUser.id,
+          username: foundUser.username,
           token: accessToken,
         });
       }
