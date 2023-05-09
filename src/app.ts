@@ -15,6 +15,7 @@ import groupRoutes from "./adapters/routes/group.routes";
 import conversationRoutes from "./adapters/routes/conversation.routes";
 import messageRoutes from "./adapters/routes/message.routes";
 import eventRoutes from "./adapters/routes/event.routes";
+import reportRoutes from "./adapters/routes/report.routes"
 
 export class App {
   private readonly app: Express;
@@ -43,6 +44,7 @@ export class App {
     this.app.use("/conversation", conversationRoutes);
     this.app.use("/message", messageRoutes);
     this.app.use("/events", eventRoutes);
+    this.app.use("/reports", reportRoutes);
   }
 
   public async start(): Promise<void> {
