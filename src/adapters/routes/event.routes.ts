@@ -10,6 +10,8 @@ import { validateFields } from "../middlewares/validate-fields";
 import { check, query } from "express-validator";
 import { isValidDate } from "../../helpers/customChecks";
 import { validateJwt } from "../middlewares/validate-jwt";
+import { highlight } from "../controllers/event/highlight";
+import { removeHighlight } from "../controllers/event/removeHighlight";
 
 const router = Router();
 
@@ -47,8 +49,12 @@ router.get("/", getAllEvents);
 
 router.post("/", createEvent);
 
-router.put("/:id", updateEvent);
-
 router.delete("/:id", deleteEvent);
+
+router.put("/highlight", highlight);
+
+router.put("/removeHighlight", removeHighlight);
+
+router.put("/:id", updateEvent);
 
 export default router;
