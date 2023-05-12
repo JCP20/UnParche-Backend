@@ -10,7 +10,7 @@ export const getUserById = async (req: Request, res: Response) => {
     const usuario = await UserModel.findById(id, {
       refreshToken: 0,
       password: 0,
-    }).populate("groups");
+    });
     if (usuario) {
       return res.status(200).json({ ok: true, data: usuario });
     } else {

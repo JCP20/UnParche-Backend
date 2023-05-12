@@ -5,7 +5,7 @@ export const getGroupById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const group = await Group.findById(id);
+    const group = await Group.findById(id).populate("administrators");
 
     if (group) {
       return res.status(200).json({ ok: true, data: group });
