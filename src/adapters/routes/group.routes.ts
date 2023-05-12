@@ -16,12 +16,14 @@ import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
 import { createGroup } from "../controllers/group/createGroup";
+import { getGroupById } from "../controllers/group/getByID";
 
 const router = Router();
 
 router.use(validateJwt);
 router.get("/", getAllGroups);
 router.get("/:name", getGroupByName);
+router.get("/profile/:id", getGroupById);
 router.post("/", createGroup);
 
 router.post(
@@ -56,10 +58,10 @@ router.put(
 router.delete("/delete/:id", Delete);
 
 router.get(
-  "/your-groups/:userId",
+  "/your-groups/:id",
   [
     check(
-      "userId",
+      "id",
       "El id del usuario del que se quiere encontrar el grupo es obligatorio"
     )
       .not()

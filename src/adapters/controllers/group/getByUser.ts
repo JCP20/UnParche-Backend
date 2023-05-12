@@ -9,14 +9,17 @@ export const getGroupsfromUser = async (req: Request, res: Response) => {
       $or: [
         {
           administrators: {
-            $in: [req.params.userId],
+            $in: [req.params.id],
           },
+        },
+        {
           members: {
-            $in: [req.params.userId],
+            $in: [req.params.id],
           },
         },
       ],
     });
+
     if (user_groups) {
       return res.status(200).json({ ok: true, data: user_groups });
     } else {

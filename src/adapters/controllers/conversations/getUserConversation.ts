@@ -5,7 +5,7 @@ export const getUserConversation = async (req: Request, res: Response) => {
   try {
     const conversation = await Conversation.find({
       members: { $in: [req.params.id] },
-    });
+    }).populate("members");
     res.status(200).json({ ok: true, data: conversation });
   } catch (err) {
     res.status(500).json({ ok: false, msg: "Internal server error" });
