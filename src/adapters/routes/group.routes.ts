@@ -15,12 +15,14 @@ import { Register } from "../controllers/group/register";
 import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
+import { createGroup } from "../controllers/group/createGroup";
 
 const router = Router();
 
 router.use(validateJwt);
 router.get("/", getAllGroups);
 router.get("/:name", getGroupByName);
+router.post("/", createGroup);
 
 router.post(
   "/register",
@@ -84,11 +86,7 @@ router.get(
 router.get(
   "/users/:groupId",
   [
-    check(
-      "groupId", "El id del grupo es obligatorio"
-    )
-      .not()
-      .isEmpty(),
+    check("groupId", "El id del grupo es obligatorio").not().isEmpty(),
     validateFields,
   ],
   getUsersFromGroup

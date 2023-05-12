@@ -30,8 +30,8 @@ export class App {
   private useMiddlewares(): void {
     // this.app.use(credentials);
     this.app.use(cors(corsOptions));
-    this.app.use(express.urlencoded({ extended: false }));
-    this.app.use(express.json());
+    this.app.use(express.urlencoded({ limit: "10mb", extended: false }));
+    this.app.use(express.json({ limit: "10mb" }));
     this.app.use(morgan("tiny"));
     this.app.use(cookieParser());
   }
