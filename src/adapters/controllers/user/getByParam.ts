@@ -10,15 +10,11 @@ export const getUserByParam = async (req: Request, res: Response) => {
         //obtaing the information from the database
         //need to search from the categories and the name, get every group that contain the substring name
             const users = await UserModel.find({
-                username: { $regex: username, $options: "i" },
+                $or: [
+                    { username: { $regex: username, $options: "i" } },
+                    { email: { $regex: username, $options: "i" } }
+                  ]
             });
-            //if users is empty, search by email
-            if (users.length === 0) {
-                console.log("reached")
-                const users = await UserModel.find({
-                    email: { $regex: username, $options: "i" },
-                });
-                return res.status(200).json({ ok: true, users});}
             return res.status(200).json({ ok: true, users}); 
     } catch (error) {
         //console log the error
