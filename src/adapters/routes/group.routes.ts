@@ -15,13 +15,13 @@ import { Register } from "../controllers/group/register";
 import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
-
+import { getGroupByParam } from "../controllers/group/getByParam";
 const router = Router();
 
 router.use(validateJwt);
+router.get("/getByParams", getGroupByParam);
 router.get("/", getAllGroups);
 router.get("/:name", getGroupByName);
-
 router.post(
   "/register",
   [
