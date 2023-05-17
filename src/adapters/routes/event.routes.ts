@@ -33,7 +33,7 @@ router.get(
 );
 
 router.get(
-    "/:name",
+    "/byName/:name",
     [
         check(
             "name", "El nombre del evento es obligatorio"

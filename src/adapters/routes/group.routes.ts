@@ -16,6 +16,8 @@ import { Update } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
 import { getGroupByParam } from "../controllers/group/getByParam";
+import { getRecommendationByCategories } from "../controllers/group/getByCategories";
+
 const router = Router();
 
 router.use(validateJwt);
@@ -92,6 +94,19 @@ router.get(
     validateFields,
   ],
   getUsersFromGroup
+);
+
+router.get(
+  "/recommendations/:userId",
+  [
+    check(
+      "userId", "El id del usuario es obligatorio"
+    )
+      .not()
+      .isEmpty(),
+    validateFields,
+  ],
+  getRecommendationByCategories
 );
 
 export default router;
