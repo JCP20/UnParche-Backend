@@ -86,6 +86,7 @@ export const revalidateToken = async (req: Request, res: Response) => {
           id: foundUser.id,
           username: foundUser.username,
           token: accessToken,
+          role: foundUser.role,
         });
       }
     );

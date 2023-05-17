@@ -38,6 +38,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
           id: userUpdated.id,
           username: userUpdated.username,
           token: accessToken,
+          role: userUpdated.role,
         },
       });
     } else {

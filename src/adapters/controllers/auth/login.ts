@@ -64,6 +64,7 @@ export const loginUser = async (req: Request, res: Response) => {
       id: currentUser.id,
       username: currentUser.username,
       token: accessToken,
+      role: currentUser.role,
     });
   } catch (error) {
     return res.status(500).json({
