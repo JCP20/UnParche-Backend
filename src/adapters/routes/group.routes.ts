@@ -5,7 +5,7 @@
 
 import { Router } from "express";
 import { check } from "express-validator";
-import { Delete } from "../controllers/group/delete";
+import { deleteGroup } from "../controllers/group/delete";
 import { getAllGroups } from "../controllers/group/getAllGroups";
 import { getGroupByName } from "../controllers/group/getByName";
 import { getGroupsfromUser } from "../controllers/group/getByUser";
@@ -55,7 +55,7 @@ router.put(
   Update
 );
 
-router.delete("/delete/:id", Delete);
+router.delete("/:id", deleteGroup);
 
 router.get(
   "/your-groups/:id",

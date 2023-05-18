@@ -3,8 +3,8 @@ import { IReport } from "../domain/entities/report";
 
 const ReportSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User" },
-    eventId: { type: Schema.Types.ObjectId, ref: "Event" },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    event: { type: Schema.Types.ObjectId, ref: "Event" },
     reason: { type: String, required: true },
   },
   {

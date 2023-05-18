@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
 import { IGroup } from "../domain/entities/groups";
+import EventModel from "./Event.model";
 
-const groupSchema = new Schema(
+const GroupSchema = new Schema(
   {
     category: {
       type: String,
@@ -26,4 +27,10 @@ const groupSchema = new Schema(
   }
 );
 
-export default model<IGroup>("Group", groupSchema);
+GroupSchema.pre("deleteOne", async function (next) {
+  const groupId = this.getQuery()._id;
+  await EventModel.deleteMany({ group: groupId });
+  next();
+});
+
+export default model<IGroup>("Group", GroupSchema);

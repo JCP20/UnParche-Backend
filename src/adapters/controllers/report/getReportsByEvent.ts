@@ -6,7 +6,9 @@ export const getReportsByEvent = async (req: Request, res: Response) => {
     const { eventId } = req.params;
 
     // find reports by event
-    const reports = await ReportModel.find({ eventId: eventId });
+    const reports = await ReportModel.find({ event: eventId }).populate(
+      "user event"
+    );
 
     return res.status(200).json({ ok: true, data: reports });
   } catch (error) {

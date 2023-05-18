@@ -5,8 +5,6 @@ import JWTGenerator from "../../../helpers/jwt";
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
-    const cookies = req.cookies;
-
     const { email, password } = req.body;
 
     const currentUser = await UserModel.findOne({ email });

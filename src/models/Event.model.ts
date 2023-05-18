@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
 import { IEvent } from "../domain/entities/events";
+import ReportModel from "./Report.model";
 
-const eventSchema = new Schema(
+const EventSchema = new Schema(
   {
     group: { type: Schema.Types.ObjectId, ref: "Group" },
     title: { type: String, required: true },
@@ -15,4 +16,10 @@ const eventSchema = new Schema(
   }
 );
 
-export default model<IEvent>("Event", eventSchema);
+EventSchema.pre("deleteOne", async function (next) {
+  const eventId = this.getQuery()._id;
+  await ReportModel.deleteMany({ event: eventId });
+  next();
+});
+
+export default model<IEvent>("Event", EventSchema);

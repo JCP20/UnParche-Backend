@@ -1,30 +1,29 @@
 import GroupModel from "../../../models/Group.model";
 import { Request, Response } from "express";
 import { IGroup } from "../../../domain/entities/groups";
+import EventModel from "../../../models/Event.model";
 
-export const Delete = async (req: Request, res: Response) => {
+export const deleteGroup = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; // Obtén el ID del usuario a eliminar desde los parámetros de la solicitud
+    const { id } = req.params; // Obtén el ID del grupo
 
-    // Verifica si existe un usuario con el ID proporcionado
-    const usuarioExistente: IGroup | null = await GroupModel.findById(id);
-    if (!usuarioExistente) {
-      return res.status(400).json({ mensaje: "El grupo no existe" });
+    // Verifica si existe un grupo con el ID proporcionado
+    const group: IGroup | null = await GroupModel.findByIdAndDelete(id);
+
+    if (!group) {
+      return res
+        .status(404)
+        .json({ ok: false, mensaje: "No se encontró el grupo" });
     }
 
-    // Elimina el usuario de la base de datos
-    await GroupModel.findByIdAndDelete(id);
-
-    res
+    return res
       .status(200)
       .json({ ok: true, mensaje: "Grupo eliminado exitosamente" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        ok: false,
-        mensaje: "Ocurrió un error en el servidor al eliminar el grupo",
-      });
+    res.status(500).json({
+      ok: false,
+      mensaje: "Ocurrió un error en el servidor al eliminar el grupo",
+    });
   }
 };

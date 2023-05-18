@@ -6,7 +6,9 @@ export const getReportsByUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
 
     // find reports by user
-    const reports = await ReportModel.find({ userId: userId });
+    const reports = await ReportModel.find({ user: userId }).populate(
+      "user event"
+    );
 
     return res.status(200).json({ ok: true, data: reports });
   } catch (error) {
