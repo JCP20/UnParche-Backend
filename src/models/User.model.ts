@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, startSession } from "mongoose";
 import { IUser } from "../domain/entities/users";
 import ConversationModel from "./Conversation.model";
 import GroupModel from "./Group.model";
@@ -32,24 +32,33 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.pre("deleteOne", async function (next) {
-  const userId = this.getQuery()._id;
-  await ConversationModel.deleteMany({ members: userId });
+UserSchema.pre("findOneAndDelete", async function (next) {
+  const session = await startSession();
 
-  const groups = await GroupModel.find({ administrators: userId });
+  try {
+    const userId = this.getQuery()._id;
+    await ConversationModel.deleteMany({ members: userId });
 
-  for (const group of groups) {
-    if (group.administrators.length === 1) {
-      await group.deleteOne();
-    } else {
-      group.administrators = group.administrators.filter(
-        (admin) => admin.toString() !== userId
-      );
-      await group.save();
+    const groups = await GroupModel.find({ administrators: userId });
+
+    for (const group of groups) {
+      if (group.administrators.length === 1) {
+        await GroupModel.findByIdAndDelete(group._id);
+      } else {
+        group.administrators = group.administrators.filter(
+          (admin) => admin.toString() !== userId
+        );
+        await group.save();
+      }
     }
-  }
 
-  next();
+    next();
+  } catch (error: any) {
+    await session.abortTransaction();
+    next(error);
+  } finally {
+    session.endSession();
+  }
 });
 
 export default model<IUser>("User", UserSchema);

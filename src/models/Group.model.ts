@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, startSession } from "mongoose";
 import { IGroup } from "../domain/entities/groups";
 import EventModel from "./Event.model";
 
@@ -27,10 +27,20 @@ const GroupSchema = new Schema(
   }
 );
 
-GroupSchema.pre("deleteOne", async function (next) {
-  const groupId = this.getQuery()._id;
-  await EventModel.deleteMany({ group: groupId });
-  next();
+GroupSchema.pre("findOneAndDelete", async function (next) {
+  const session = await startSession();
+
+  try {
+    session.startTransaction();
+    const groupId = this.getQuery()._id;
+    await EventModel.deleteMany({ group: groupId }, { session });
+    next();
+  } catch (error: any) {
+    await session.abortTransaction();
+    next(error);
+  } finally {
+    session.endSession();
+  }
 });
 
 export default model<IGroup>("Group", GroupSchema);

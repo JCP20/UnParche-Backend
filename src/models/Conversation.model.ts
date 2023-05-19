@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, startSession } from "mongoose";
 import { IConversation } from "../domain/entities/conversation";
 import Message from "./Message.model";
 
@@ -11,10 +11,34 @@ const ConversationSchema = new Schema(
   }
 );
 
-ConversationSchema.pre("deleteOne", async function (next) {
-  const conversationId = this.getQuery()._id;
-  await Message.deleteMany({ conversation: conversationId });
-  next();
+ConversationSchema.pre("findOneAndDelete", async function (next) {
+  const session = await startSession();
+  try {
+    session.startTransaction();
+    const conversationId = this.getQuery()._id;
+    await Message.deleteMany({ conversation: conversationId }, { session });
+    next();
+  } catch (error: any) {
+    await session.abortTransaction();
+    next(error);
+  } finally {
+    session.endSession();
+  }
+});
+
+ConversationSchema.pre("deleteMany", async function (next) {
+  const session = await startSession();
+  try {
+    session.startTransaction();
+    const conversationId = this.getQuery()._id;
+    await Message.deleteMany({ conversation: conversationId }, { session });
+    next();
+  } catch (error: any) {
+    await session.abortTransaction();
+    next(error);
+  } finally {
+    session.endSession();
+  }
 });
 
 export default model<IConversation>("Conversation", ConversationSchema);

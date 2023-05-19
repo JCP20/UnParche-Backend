@@ -1,7 +1,6 @@
 import GroupModel from "../../../models/Group.model";
 import { Request, Response } from "express";
 import { IGroup } from "../../../domain/entities/groups";
-import EventModel from "../../../models/Event.model";
 
 export const deleteGroup = async (req: Request, res: Response) => {
   try {
