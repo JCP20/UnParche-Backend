@@ -17,6 +17,8 @@ import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
 import { createGroup } from "../controllers/group/createGroup";
 import { getGroupById } from "../controllers/group/getByID";
+import { enrollMember } from "../controllers/group/addUserToGroup";
+import { removeMember } from "../controllers/group/removeUserFromGroup";
 
 const router = Router();
 
@@ -93,5 +95,8 @@ router.get(
   ],
   getUsersFromGroup
 );
+
+router.patch("/enroll", enrollMember);
+router.patch("/removeMember", removeMember);
 
 export default router;

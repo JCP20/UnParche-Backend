@@ -17,6 +17,7 @@ import messageRoutes from "./adapters/routes/message.routes";
 import eventRoutes from "./adapters/routes/event.routes";
 import reportRoutes from "./adapters/routes/report.routes";
 import statisticsRoutes from "./adapters/routes/statistics.routes";
+import searchRoutes from "./adapters/routes/search.routes";
 
 export class App {
   private readonly app: Express;
@@ -47,6 +48,7 @@ export class App {
     this.app.use("/events", eventRoutes);
     this.app.use("/reports", reportRoutes);
     this.app.use("/statistics", statisticsRoutes);
+    this.app.use("/search", searchRoutes);
   }
 
   public async start(): Promise<void> {

@@ -39,9 +39,11 @@ UserSchema.pre("findOneAndDelete", async function (next) {
     const userId = this.getQuery()._id;
     await ConversationModel.deleteMany({ members: userId });
 
-    const groups = await GroupModel.find({ administrators: userId });
+    const groupsThatAdministrate = await GroupModel.find({
+      administrators: userId,
+    });
 
-    for (const group of groups) {
+    for (const group of groupsThatAdministrate) {
       if (group.administrators.length === 1) {
         await GroupModel.findByIdAndDelete(group._id);
       } else {
@@ -52,6 +54,15 @@ UserSchema.pre("findOneAndDelete", async function (next) {
       }
     }
 
+    const memberOfGroups = await GroupModel.find({ members: userId });
+
+    for (const group of memberOfGroups) {
+      group.members = group.members.filter(
+        (member) => member.toString() !== userId
+      );
+      await group.save();
+    }
+
     next();
   } catch (error: any) {
     await session.abortTransaction();
@@ -59,6 +70,12 @@ UserSchema.pre("findOneAndDelete", async function (next) {
   } finally {
     session.endSession();
   }
+});
+
+UserSchema.pre("find", function (next) {
+  this.select("-refreshToken");
+  this.select("-password");
+  next();
 });
 
 export default model<IUser>("User", UserSchema);
