@@ -22,18 +22,25 @@ import { IUser } from "../../../domain/entities/users";
 import VerifyUserService from "../../services/user/verifyUser.service";
 
 export default class VerifyUserFacade{
+
     private verifyService: VerifyUserService;
 
-    constructor(verifyService: VerifyUserService){
+    constructor(){
+        const verifyService = new VerifyUserService();
         this.verifyService = verifyService;
     }
 
     async register(email: string, password: string, username: string){
         try{
-            await this.verifyService.register(email, password, username);
-            return { success: true };
-        }catch(error){
-            return { success: false, msg: error.message };
+            const ans:string = await this.verifyService.register(email, password, username);
+            if(ans === ''){
+                return { success: true, msg: "Usuario registrado exitosamente" };
+            }else{
+                return { success: false, msg: ans };
+            } 
+
+        }catch(error: any|Error){
+            return { success: false, msg: error.message };  
         }
     }    
     async login(email: string, password: string){
@@ -41,7 +48,7 @@ export default class VerifyUserFacade{
             //devuelve el id, el username y el accessToken
             await this.verifyService.login(email, password);
             return { success: true, msg: "El usuario ha ingresado con éxito a su cuenta"};
-        } catch (error) {
+        } catch (error: any|Error) {
             return { success: false, msg: error.message};
         }
     }

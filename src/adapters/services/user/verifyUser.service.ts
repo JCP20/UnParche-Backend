@@ -44,16 +44,17 @@ export default class VerifyUserService {
         const session : ClientSession = await startSession();
         session.startTransaction();
 
-        try {   
+        try { 
+            
             const usuarioExistente: IUser |  null = await this.user.findOne({ email });
             if (usuarioExistente) {
                 //Se verifica que el email no este registrado
-                throw new Error('El correo ya se encuentra registrado');
+                return 'El correo ya se encuentra registrado';
             }
             const usernameExistente: IUser | null = await this.user.findOne({ username });
             if (usernameExistente) {
                 //Se verifica que el username no este registrado
-                throw new Error('Ya existe un usuario con ese nombre de usuario');
+                return 'Ya existe un usuario con ese nombre de usuario';
             }
             
             // Encriptar contraseña
@@ -82,7 +83,8 @@ export default class VerifyUserService {
             await session.commitTransaction();
             session.endSession();
 
-            return nuevoUsuario;
+            console.log(nuevoUsuario);
+            return '';
 
         }catch(error){
             console.error(error);

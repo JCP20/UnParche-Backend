@@ -6,8 +6,8 @@
 import { Router } from "express";
 import { check } from "express-validator";
 import { validateFields } from "../middlewares/validate-fields";
-import { loginUser } from "../controllers/auth/login";
-import { register } from "../controllers/auth/register";
+import { loginUser } from "../controllers/auth/login.controller";
+import { register } from "../controllers/auth/register.controller";
 import { revalidateToken } from "../controllers/auth/renew";
 import { verifyEmail } from "../controllers/auth/verifyEmail";
 import { isValidEmail } from "../../helpers/customChecks";
