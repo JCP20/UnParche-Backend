@@ -12,7 +12,7 @@ import { getGroupsfromUser } from "../controllers/group/getByUser";
 import { getGroupsfromAdmin } from "../controllers/group/getByAdmin";
 import { getUsersFromGroup } from "../controllers/group/getUsers";
 import { Register } from "../controllers/group/register";
-import { Update } from "../controllers/group/update";
+import { updateGroup } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
 import { createGroup } from "../controllers/group/createGroup";
@@ -43,18 +43,15 @@ router.post(
   Register
 );
 
-router.put(
-  "/update/:groupId/:userId",
+router.patch(
+  "/update/:groupId",
   [
     check("groupId", "El id del grupo a actualizar es obligatorio")
       .not()
       .isEmpty(),
-    check("userId", "El id del usuario que va a realizar la actualización")
-      .not()
-      .isEmpty(),
     validateFields,
   ],
-  Update
+  updateGroup
 );
 
 router.delete("/:id", deleteGroup);

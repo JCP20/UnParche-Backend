@@ -32,6 +32,7 @@ ConversationSchema.pre("deleteMany", async function (next) {
     session.startTransaction();
     const conversationId = this.getQuery()._id;
     await Message.deleteMany({ conversation: conversationId }, { session });
+    await session.commitTransaction();
     next();
   } catch (error: any) {
     await session.abortTransaction();

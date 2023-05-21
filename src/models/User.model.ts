@@ -62,7 +62,7 @@ UserSchema.pre("findOneAndDelete", async function (next) {
       );
       await group.save();
     }
-
+    await session.commitTransaction();
     next();
   } catch (error: any) {
     await session.abortTransaction();

@@ -1,7 +1,5 @@
-import Event from "../../../models/Event.model";
-import GroupModel from "../../../models/Group.model";
-import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
+import Event from "../../../models/Event.model";
 
 export const getByUser = async (req: Request, res: Response) => {
   try {

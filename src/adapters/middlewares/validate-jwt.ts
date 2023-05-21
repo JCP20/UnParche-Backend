@@ -21,7 +21,7 @@ export const validateJwt = (
       token,
       process.env.SECRET_JWT_SEED_ACCESS ?? ""
     ) as IPayloadJWT;
-    req.body.id = id;
+    req.body.userId = id;
     req.body.username = username;
   } catch (error) {
     return res.status(401).json({ ok: false, msg: "Token is not valid" });

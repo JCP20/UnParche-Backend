@@ -40,7 +40,7 @@ class JWTGenerator {
     id: string;
     username: string;
   }): Promise<string> {
-    return this.generateToken(payload, this.secretAccess, "15m");
+    return this.generateToken(payload, this.secretAccess, "1d");
   }
 
   public async generateRefreshToken(payload: {

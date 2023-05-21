@@ -21,6 +21,7 @@ export const createGroup = async (req: Request, res: Response) => {
     return res.status(200).json({
       ok: true,
       msg: "Grupo registrado",
+      data: nuevoGrupo,
     });
   } catch (err) {
     console.log(err);

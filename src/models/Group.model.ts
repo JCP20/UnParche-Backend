@@ -29,11 +29,11 @@ const GroupSchema = new Schema(
 
 GroupSchema.pre("findOneAndDelete", async function (next) {
   const session = await startSession();
-
   try {
     session.startTransaction();
     const groupId = this.getQuery()._id;
     await EventModel.deleteMany({ group: groupId }, { session });
+    await session.commitTransaction();
     next();
   } catch (error: any) {
     await session.abortTransaction();

@@ -23,6 +23,7 @@ EventSchema.pre("findOneAndDelete", async function (next) {
     session.startTransaction();
     const eventId = this.getQuery()._id;
     await ReportModel.deleteMany({ event: eventId }, { session });
+    await session.commitTransaction();
     next();
   } catch (error: any) {
     await session.abortTransaction();
