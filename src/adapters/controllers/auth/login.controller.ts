@@ -1,74 +1,40 @@
-import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import JWTGenerator from "../../../helpers/jwt";
+import AuthUserFacade from "../../facades/user/authUser.facade";
+
 
 export const loginUser = async (req: Request, res: Response) => {
-  try {
     const cookies = req.cookies;
-
     const { email, password } = req.body;
 
-    const currentUser = await UserModel.findOne({ email });
+    const verification = new AuthUserFacade();
+    const result = await verification.login(email,password);  
 
-    if (!currentUser) {
-      //Se verifica que el nombre de usuario exista
-      return res
-        .status(404)
-        .json({ ok: false, msg: "El correo dado no se encuentra registrado" });
-    }
+    if(result.success === true){
 
-    if (!currentUser.verified) {
-      //Se verifica que el usuario haya verificado su cuenta
-      return res.status(401).json({
-        ok: false,
-        msg: "Debes verificar tu cuenta para poder ingresar",
+      const [refreshToken, id, username, token] = result.ans ?? ['', '', '', ''];
+
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        // secure: true,
+        // sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24,
       });
-    }
+  
+      return res.status(200).json({
+        ok: true,
+        msg: result.msg,
+        id: id,
+        username: username,
+        token: token,
+      });
 
-    const passwordMatches = bcrypt.compareSync(password, currentUser.password);
-
-    //Se verifica que la contraseña sea correcta
-    if (!passwordMatches) {
+    }else{
       return res.status(400).json({
-        ok: false,
-        msg: "La contraseña es incorrecta, vuelva a intentarlo",
+        success: false,
+        msg: result.msg,
       });
     }
 
-    // Generate JWTs
-    const accessToken = await JWTGenerator.generateAccessToken({
-      id: currentUser.id,
-      username: currentUser.username,
-    });
+    
 
-    const refreshToken = await JWTGenerator.generateRefreshToken({
-      id: currentUser.id,
-      username: currentUser.username,
-    });
-
-    currentUser.refreshToken = refreshToken;
-
-    await currentUser.save();
-
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true,
-      // secure: true,
-      // sameSite: "none",
-      maxAge: 1000 * 60 * 60 * 24,
-    });
-
-    return res.status(200).json({
-      ok: true,
-      msg: "El usuario ha ingresado con éxito a su cuenta",
-      id: currentUser.id,
-      username: currentUser.username,
-      token: accessToken,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      ok: false,
-      msg: "Ocurrió un error en el servidor al ingresar a la cuenta",
-    });
-  }
 };

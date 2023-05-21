@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import VerifyUserFacade from "../../facades/user/verifyUser.facade";
+import VerifyUserFacade from "../../facades/user/authUser.facade";
 
 //registro de usuario
 export const register = async (req: Request, res: Response) => {
   // Validar existencia de la información del usuario
   const { email, password, username} = req.body;
 
-  const verificacion = new VerifyUserFacade();
-  const result = await verificacion.register(email,password,username);  
+  const verification = new VerifyUserFacade();
+  const result = await verification.register(email,password,username);  
   if(result.success === true){
     return res.status(200).json({
       success: true,

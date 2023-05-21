@@ -32,11 +32,14 @@ import JWTGenerator from "../../../helpers/jwt";
 import { sendEmail } from "../../../helpers/email";
 import { verificarUsuario } from "../../../helpers/emailTemplates/verifyUser";
 
+import SearchUserService from "./searchUser.service";
 
-export default class VerifyUserService {
+export default class AuthUserService {
     private user: Model<IUser>;
+    private search: SearchUserService;
     constructor(){
         this.user = UserModel;
+        this.search = new SearchUserService();
     }
 
     //Verificación al momento de hacer el registro
@@ -46,12 +49,12 @@ export default class VerifyUserService {
 
         try { 
             
-            const usuarioExistente: IUser |  null = await this.user.findOne({ email });
+            const usuarioExistente: IUser |  null = await this.search.byEmail(email);
             if (usuarioExistente) {
                 //Se verifica que el email no este registrado
                 return 'El correo ya se encuentra registrado';
             }
-            const usernameExistente: IUser | null = await this.user.findOne({ username });
+            const usernameExistente: IUser |  null = await this.search.byUsername(username);
             if (usernameExistente) {
                 //Se verifica que el username no este registrado
                 return 'Ya existe un usuario con ese nombre de usuario';
@@ -96,40 +99,41 @@ export default class VerifyUserService {
 
     //Verificación para login
     async login(email: string, password: string){
+
         try {    
-            const currentUser = await this.user.findOne({ email });
+            const currentUser = await this.search.byEmail(email);
             if (!currentUser) {
-                //Se verifica que el nombre de usuario exista
-                throw new Error('El correo no se encuentra registrado');
+                //Se verifica que el email esté registrado
+                return ['El correo no se encuentra registrado'];
             }
             if (!currentUser.verified) {
                 //Se verifica que el usuario haya verificado su cuenta
-                throw new Error('Debes verificar tu cuenta para poder ingresar');
+                return ['Debes verificar tu cuenta para poder ingresar'];
             }
 
             const passwordMatches = bcrypt.compareSync(password, currentUser.password);
 
             //Se verifica que la contraseña sea correcta
             if (!passwordMatches) {
-                throw new Error('La contraseña es incorrecta, vuelva a intentarlo');
+                return ['La contraseña es incorrecta, vuelva a intentarlo'];
             }
 
             // Generate JWTs
             const accessToken = await JWTGenerator.generateAccessToken({
-            id: currentUser.id,
-            username: currentUser.username,
+                id: currentUser.id,
+                username: currentUser.username,
             });
 
             const refreshToken = await JWTGenerator.generateRefreshToken({
-            id: currentUser.id,
-            username: currentUser.username,
+                id: currentUser.id,
+                username: currentUser.username,
             });
 
             currentUser.refreshToken = refreshToken;
-
+        
             await currentUser.save();
 
-            return currentUser.id, currentUser.username, accessToken;
+            return [refreshToken, currentUser.id, currentUser.username, accessToken];
 
         }catch(error){
             console.log(error);
@@ -137,6 +141,7 @@ export default class VerifyUserService {
         }
 
     }
+
 };
 
 

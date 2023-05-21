@@ -4,12 +4,12 @@
 */
 
 import { Router } from "express";
-import { getAllUsers } from "../controllers/user/getAll";
-import { getUserById } from "../controllers/user/getByID";
+import { getAllUsers } from "../controllers/user/getAll.controller";
+import { getUserById } from "../controllers/user/getByID.controller";
 import { validateJwt } from "../middlewares/validate-jwt";
-import { updateUser } from "../controllers/user/updateUser";
-import { enrollGroup } from "../controllers/user/enrollGroup";
-import { quitGroup } from "../controllers/user/quitGroup";
+import { updateUser } from "../controllers/user/updateUser.controller";
+import { enrollGroup } from "../controllers/user/enrollGroup.controller";
+import { quitGroup } from "../controllers/user/quitGroup.controller";
 const router = Router();
 
 router.get("/:id", getUserById);

@@ -1,32 +1,14 @@
 //Son una capa adicional que se coloca entre el controlador y el servicio.
 //Su objetivo principal es ocultar la complejidad y la lógica de los servicios.
 
-/** (Se hacen las mismas fachadas que en los servicios)
- * 
- * Verificar datos usuario
- * Verificar datos grupo
- * Verificar datos evento
- * 
- * Modificar datos usuario
- * Modificar datos grupo
- * Modificar datos evento
- * 
- * Eliminar usuario
- * Eliminar grupo
- * Eliminar evento 
- * 
- */
+import AuthUserService from "../../services/user/authUser.service";
 
-import { Model } from "mongoose";
-import { IUser } from "../../../domain/entities/users";
-import VerifyUserService from "../../services/user/verifyUser.service";
+export default class AuthUserFacade{
 
-export default class VerifyUserFacade{
-
-    private verifyService: VerifyUserService;
+    private verifyService: AuthUserService;
 
     constructor(){
-        const verifyService = new VerifyUserService();
+        const verifyService = new AuthUserService();
         this.verifyService = verifyService;
     }
 
@@ -42,12 +24,20 @@ export default class VerifyUserFacade{
         }catch(error: any|Error){
             return { success: false, msg: error.message };  
         }
-    }    
+    }
+
     async login(email: string, password: string){
         try {
+            let ans: Array<string> = [];
             //devuelve el id, el username y el accessToken
-            await this.verifyService.login(email, password);
-            return { success: true, msg: "El usuario ha ingresado con éxito a su cuenta"};
+            ans = await this.verifyService.login(email, password);
+            if (ans.length === 1){
+                return { success: false, msg: ans[0]};
+            }else if (ans.length === 4){
+                return { success: true, msg: "El usuario ha ingresado con éxito a su cuenta", ans: ans};
+            }else{
+                return { success: false, msg: "Formato no definido"};
+            }
         } catch (error: any|Error) {
             return { success: false, msg: error.message};
         }
