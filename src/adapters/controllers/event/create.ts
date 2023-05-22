@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
 import EventModel from "../../../models/Event.model";
+import CreateEventFacade from "../../facades/event/createEvent.facade";
 
 export const createEvent = async (req: Request, res: Response) => {
-  try {
-    const newEvent = new EventModel(req.body);
+  const createEvent = new CreateEventFacade();
+  const result = await createEvent.create(req.body);
 
-    const savedEvent = await newEvent.save();
-
-    return { ok: true, msg: "Event created", data: savedEvent };
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(400)
-      .json({ ok: false, msg: "Error en la creación del evento" });
-  }
+  if(result.success){
+    return { ok: true, msg: "Event created", data: result.data };
+  }else{
+    return { ok: false, msg: result.msg };
+  }  
 };
