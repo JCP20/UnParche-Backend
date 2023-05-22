@@ -8,3 +8,4 @@ build/
 
 # dotenv environment variables
 .env
+__tests__
