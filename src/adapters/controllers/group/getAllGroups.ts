@@ -1,13 +1,13 @@
-import GroupModel from "../../../models/Group.model";
 import { Request, Response } from "express";
+import GetGroups from "../../facades/group/getGroups.facade";
 
 export const getAllGroups = async (req: Request, res: Response) => {
-  try {
-    // retornar todos los gruposs registrados
-    const groups = await GroupModel.find({});
-    return res.status(200).json({ ok: true, data: groups });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ ok: false, msg: "Error obteniendo grupos" });
-  }
+    // retornar todos los grupos registrados
+    const search = new GetGroups();
+    const result = await search.getAllGroups();
+    if (result.success) {
+      return res.status(200).json({ success: true, data: result.data });
+    } else {
+      return res.status(500).json({ success: false, msg: result.msg });
+    }
 };

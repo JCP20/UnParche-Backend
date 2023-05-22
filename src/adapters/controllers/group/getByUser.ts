@@ -1,20 +1,21 @@
-import mongoose from "mongoose";
-import GroupModel from "../../../models/Group.model";
 import { Request, Response} from "express";
+import mongoose from "mongoose";
+import GetGroups from "../../facades/group/getGroups.facade";
 
 export const getGroupsfromUser = async (req: Request, res: Response) => {
-    try {
-      // retornar los grupos dado el usuario
-      const current_user = new mongoose.Types.ObjectId(req.params.userId);
-      const user_groups = await GroupModel.find({members:current_user});
-      if (user_groups) {
-        return res.status(200).json({ ok: true, data: user_groups });
-      } else {
-        return res.status(404).json({ ok: false, msg: "El usuario no pertenece a ningún grupo" });
-      }
-  
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ ok: false, msg: "Error al obtener los grupos del usuario" });
+
+  // retornar los grupos dado el usuario
+  const search = new GetGroups();
+  const current_user = req.params.userId;
+  const result = await search.getGroupsByUser(current_user);
+  if (result.success) {
+    if(result.data){
+      return res.status(200).json({ success: true, data: result.data });
+    }else{
+      return res.status(404).json({ success: false, msg: "El usuario no pertenece a ningún grupo" });
     }
-  };
+  } else {
+    return res.status(500).json({ success: false, msg: result.msg });
+  }
+  
+};

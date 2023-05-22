@@ -8,8 +8,7 @@ export default class AuthUserFacade{
     private verifyService: AuthUserService;
 
     constructor(){
-        const verifyService = new AuthUserService();
-        this.verifyService = verifyService;
+        this.verifyService = new AuthUserService();
     }
 
     async register(email: string, password: string, username: string){

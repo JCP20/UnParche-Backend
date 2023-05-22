@@ -12,9 +12,9 @@ export const getUserById = async (req: Request, res: Response) => {
     if(result.data){
       return res.status(200).json({ ok: true, data: result.data });
     }else{
-      return res.status(200).json({ ok: false, msg: "Usuario no encontrado" });
+      return res.status(404).json({ ok: false, msg: "Usuario no encontrado" });
     }
   } else {
-    return res.status(500).json({ ok: false, msg: result.msg });
+    return res.status(400).json({ ok: false, msg: result.msg });
   }
 };

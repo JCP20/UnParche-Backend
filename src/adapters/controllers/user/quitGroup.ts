@@ -10,7 +10,7 @@ export const quitGroup = async (req: Request, res: Response) => {
   
   const result = await userFacade.quitGroup(username,name);
   if(result.success === true){
-    return res.status(200).json({
+    return res.json({
       success: true,
       msg: result.msg,
     });

@@ -12,12 +12,13 @@ export const updateUser = async (req: Request, res: Response) => {
   if(result.success){
     return res.status(200).json({
       success: true,
+      msg: "Actualizacion exitosa",
       data: result.data,
     });
   }else{
     return res.status(400).json({
       success: false,
-      data: result.msg,
+      msg: result.msg,
     });
   }
 };

@@ -1,4 +1,4 @@
-import { Model, ObjectId } from "mongoose";
+import mongoose, { Model, ObjectId } from "mongoose";
 import { IGroup } from "../../../domain/entities/groups";
 import GroupModel from "../../../models/Group.model";
 
@@ -17,16 +17,18 @@ export default class SearchGroupService {
         return await this.group.findOne({ id });
     }
 
-    async byAdmin(idAdmin: ObjectId){
-        return await this.group.find({ administrators: idAdmin });
+    async byAdmin(idAdmin: string){
+        const current_admin = new  mongoose.Types.ObjectId(idAdmin);
+        return await this.group.find({ administrators: current_admin });
     }
 
     async byName(name: string){
         return await this.group.findOne({ name: name });
     }
 
-    async byUser(idUser: ObjectId){
-        return await this.group.find({ members: idUser });
+    async byUser(idUser: string){
+        const current_user = new  mongoose.Types.ObjectId(idUser);
+        return await this.group.find({ members: current_user });
     }
 
 }
