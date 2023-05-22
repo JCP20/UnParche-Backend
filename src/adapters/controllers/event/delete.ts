@@ -1,7 +1,5 @@
-import EventModel from "../../../models/Event.model";
 import { Request, Response } from "express";
-import { IEvent } from "../../../domain/entities/events";
-import { check, validationResult } from "express-validator";
+import EventModel from "../../../models/Event.model";
 
 export const deleteEvent = async (req: Request, res: Response) => {
   try {
