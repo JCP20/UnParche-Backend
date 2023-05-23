@@ -11,6 +11,9 @@ import { getMyEvents } from "../controllers/event/listUserGroupEvents";
 import { updateEvent } from "../controllers/event/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
+import { addUserToEvent } from "../controllers/event/addUserToEvent";
+import { removeUserFromEvent } from "../controllers/event/removeUserFromEvent";
+import { getEvent } from "../controllers/event/getEvent";
 
 const router = Router();
 
@@ -47,5 +50,11 @@ router.delete("/:id", deleteEvent);
 router.get("/fypEvents/:page/:limit", getFYPEvents);
 
 router.get("/groupEvents/:page/:limit", getMyEvents);
+
+router.patch("/add-user/:id", addUserToEvent);
+
+router.patch("/remove-user/:id", removeUserFromEvent);
+
+router.get("/get-event/:id", getEvent);
 
 export default router;

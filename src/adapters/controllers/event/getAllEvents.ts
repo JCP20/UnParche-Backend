@@ -4,7 +4,9 @@ import { Request, Response } from "express";
 export const getAllEvents = async (req: Request, res: Response) => {
   try {
     // retornar todos los eventos
-    const eventos = await EventModel.find({}).populate("group");
+    const eventos = await EventModel.find({})
+      .populate("group")
+      .select("-photo");
     return res.status(200).json({ ok: true, data: eventos });
   } catch (error) {
     console.log(error);

@@ -18,7 +18,7 @@ export const getGroupsfromUser = async (req: Request, res: Response) => {
           },
         },
       ],
-    });
+    }).select("-photo");
 
     if (user_groups) {
       return res.status(200).json({ ok: true, data: user_groups });

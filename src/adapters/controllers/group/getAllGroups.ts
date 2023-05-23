@@ -6,7 +6,8 @@ export const getAllGroups = async (req: Request, res: Response) => {
     // retornar todos los gruposs registrados
     const groups = await GroupModel.find({})
       .populate("members")
-      .populate("administrators");
+      .populate("administrators")
+      .select("-photo");
     return res.status(200).json({ ok: true, data: groups });
   } catch (error) {
     console.log(error);
