@@ -15,7 +15,7 @@ export default class DeleteGroupFacade{
             }else{
                 return {success: false, msg: ans}
             }
-        }catch(error){
+        }catch(error: any|Error){
             return {success: false, msg: error.msg};
         }
     }

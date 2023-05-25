@@ -15,7 +15,7 @@ export default class EditEventFacade{
             }else{
                 return {success: false, msg: ans.msg};
             }
-        }catch(error){
+        }catch(error: any|Error){
             console.log(error);
             return {success: false, msg: error.msg};
         }

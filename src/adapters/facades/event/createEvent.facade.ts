@@ -7,7 +7,7 @@ export default class CreateEventFacade{
         this.createService = new CreateEventService();
     }
 
-    async create(bodyEvent){
+    async create(bodyEvent:any){
         try{
             const event = this.createService.create(bodyEvent);
             return {success: true, data: event};
