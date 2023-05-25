@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import GetGroups from "../../facades/group/getGroups.facade";
+import GetGroups from "../../facades/group/searchGroups.facade";
 
 export const getAllGroups = async (req: Request, res: Response) => {
     // retornar todos los grupos registrados

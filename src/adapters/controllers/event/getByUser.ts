@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import GetEventsFacade from "../../facades/event/getEvents.facade";
+import GetEventsFacade from "../../facades/event/searchEvents.facade";
 
 export const getByUser = async (req: Request, res: Response) => {
   const search = new GetEventsFacade();

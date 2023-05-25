@@ -1,6 +1,6 @@
 import { Request, Response} from "express";
 import mongoose from "mongoose";
-import GetGroups from "../../facades/group/getGroups.facade";
+import GetGroups from "../../facades/group/searchGroups.facade";
 
 export const getGroupsfromUser = async (req: Request, res: Response) => {
 

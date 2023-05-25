@@ -1,6 +1,6 @@
 import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
-import GetUsers from "../../facades/user/getUsers.facade";
+import GetUsers from "../../facades/user/searchUsers.facade";
 
 
 export const getUserById = async (req: Request, res: Response) => {

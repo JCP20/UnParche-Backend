@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import GetUsers from "../../facades/user/getUsers.facade";
+import GetUsers from "../../facades/user/searchUsers.facade";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   let getUsers = new GetUsers();
