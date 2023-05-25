@@ -19,6 +19,7 @@ import { createGroup } from "../controllers/group/createGroup";
 import { getGroupById } from "../controllers/group/getByID";
 import { enrollMember } from "../controllers/group/addUserToGroup";
 import { removeMember } from "../controllers/group/removeUserFromGroup";
+import { getFYPGroups } from "../controllers/group/listGroupsByUserPreferred";
 
 const router = Router();
 
@@ -95,5 +96,7 @@ router.get(
 
 router.patch("/enroll", enrollMember);
 router.patch("/removeMember", removeMember);
+
+router.get("/fypGroups/:page/:limit", getFYPGroups);
 
 export default router;

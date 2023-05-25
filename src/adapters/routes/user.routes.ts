@@ -11,6 +11,7 @@ import { updateUser } from "../controllers/user/updateUser";
 
 import { quitGroup } from "../controllers/user/quitGroup";
 import { deleteUser } from "../controllers/user/deleteUser";
+import { listUsersForSearch } from "../controllers/user/listForSearch";
 const router = Router();
 
 router.get("/:id", getUserById);
@@ -18,6 +19,7 @@ router.get("/:id", getUserById);
 // Middleware to validate JWT for all next routes
 router.use(validateJwt);
 router.get("/", getAllUsers);
+router.get("/search/:username", listUsersForSearch);
 
 router.put("/quit", quitGroup);
 router.put("/:id", updateUser);
