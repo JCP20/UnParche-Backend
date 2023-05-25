@@ -1,15 +1,24 @@
 import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
+import EditUserFacade from "../../facades/user/editUser.facade";
 
 export const updateUser = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const userUpdated = await UserModel.findByIdAndUpdate(id, req.body);
-    return res
-      .status(200)
-      .json({ ok: true, msg: "Actualización exitosa", data: userUpdated });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ ok: false, msg: "Contact an admin" });
+  let update = new EditUserFacade();
+  const { id } = req.params;
+  const userData = req.body;
+
+  const result = await update.editUser(id, userData);
+
+  if(result.success){
+    return res.status(200).json({
+      success: true,
+      msg: "Actualizacion exitosa",
+      data: result.data,
+    });
+  }else{
+    return res.status(400).json({
+      success: false,
+      msg: result.msg,
+    });
   }
 };

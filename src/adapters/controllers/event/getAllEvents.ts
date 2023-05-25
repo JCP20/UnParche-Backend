@@ -1,13 +1,14 @@
-import EventModel from "../../../models/Event.model";
 import { Request, Response } from "express";
+import GetEventsFacade from "../../facades/event/searchEvents.facade";
 
 export const getAllEvents = async (req: Request, res: Response) => {
-  try {
-    // retornar todos los eventos
-    const eventos = await EventModel.find({});
-    return res.status(200).json({ ok: true, data: eventos });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ ok: false, msg: "Error obteniendo eventos" });
-  }
+
+  const search = new GetEventsFacade();
+  // retornar todos los eventos
+  const result = await search.getAll();
+    if(result.success){
+      return res.status(200).json({ ok: true, data: result.data });
+    }else{
+      return res.status(500).json({ ok: true, msg: result.msg });
+    }
 };

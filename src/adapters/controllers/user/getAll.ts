@@ -1,13 +1,19 @@
-import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
+import GetUsers from "../../facades/user/searchUsers.facade";
 
 export const getAllUsers = async (req: Request, res: Response) => {
-  try {
-    // retornar todos los usuarios registrados
-    const users = await UserModel.find({});
-    return res.status(200).json({ ok: true, data: users });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ ok: false, msg: "Contact an admin" });
+  let getUsers = new GetUsers();
+  // retornar todos los usuarios registrados
+  const result = await getUsers.getAllUsers();
+  if(result.success === true){
+    return res.status(200).json({
+      success: true,
+      data: result.data,
+    });
+  }else{
+    return res.status(500).json({
+      success: false,
+      msg: result.msg,
+    });
   }
 };

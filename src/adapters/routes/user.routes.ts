@@ -4,8 +4,8 @@
 */
 
 import { Router } from "express";
-import { getAllUsers } from "../controllers/user/getAll";
-import { getUserById } from "../controllers/user/getByID";
+import { getAllUsers } from "../controllers/user/getAll.controller";
+import { getUserById } from "../controllers/user/getByID.controller";
 import { validateJwt } from "../middlewares/validate-jwt";
 import { updateUser } from "../controllers/user/updateUser";
 import { enrollGroup } from "../controllers/user/enrollGroup";

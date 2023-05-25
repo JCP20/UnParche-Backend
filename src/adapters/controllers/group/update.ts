@@ -1,61 +1,23 @@
-import mongoose from "mongoose";
-import GroupModel from "../../../models/Group.model";
 import { Request, Response } from "express";
+import EditGroupFacade from "../../facades/group/editGroup.facade";
 
 export const Update = async (req: Request, res: Response) => {
   const { category, name, description, members, administrators } = req.body;
-  const groupId = new mongoose.Types.ObjectId(req.params.groupId);
+  const groupId = req.params.groupId;
   const userId = req.params.userId;
-  try {
-    const existingGroup = await GroupModel.findOne({
-      $or: [{ name }],
-      _id: { $ne: groupId },
-    });
-    
-    //validaciones, mas adelante se haran con express validator
-    const categories = [
-      "Arte",
-      "Deporte",
-      "Religión",
-      "Investigación",
-      "Semillero",
-      "Videojuegos",
-      "Otro",
-    ];
-    if (!categories.includes(category)) {
-      return res.status(400).json({ ok: false, msg: "La categoria no existe" });
-    }
-    if (existingGroup) {
-      return res
-        .status(400)
-        .json({ ok: false, msg: "El nombre ya esta registrado" });
-    }
-    const group = await GroupModel.findById(groupId);
-    if (!group) {
-      return res
-        .status(400)
-        .json({ ok: false, msg: "El grupo no esta registrado" });
-    }
+  
+  const update = new EditGroupFacade();
+  const result = await update.editGroup(groupId,userId,category,name,description,members,administrators);
 
-    const index = group.administrators.indexOf(userId);
-    if(index === -1){
-      return res
-        .status(403)
-        .json({ ok: false, msg: "El usuario no es administrador del grupo a editar" });
-    }
-    group.category = category;
-    group.name = name;
-    group.description = description;
-    group.members = members;
-    group.administrators = administrators;
-    await GroupModel.updateOne({"_id":groupId}, group);
-    
+  if(result.success){
     return res.status(200).json({
-      ok: true,
-      msg: "Grupo actualizado",
+      success: true,
+      msg: result.msg,
     });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ ok: false, msg: "Error actualizando grupo" });
+  }else{
+    return res.status(400).json({
+      success: false,
+      msg: result.msg,
+    });
   }
 };

@@ -1,18 +1,17 @@
-import Event from "../../../models/Event.model";
-import GroupModel from "../../../models/Group.model";
-import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
+import GetEventsFacade from "../../facades/event/searchEvents.facade";
 
 export const getByUser = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
+  const search = new GetEventsFacade();
+  const { id } = req.params;
 
-    // find events by user
-    const events = await Event.find({ users: id });
+  // find events by user
+  const result = await search.getByUser(id);
 
-    return res.status(200).json({ ok: true, data: events });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ ok: false, msg: "Error obteniendo eventos" });
-  }
+  if(result.success){
+    return res.status(200).json({ success: true, data: result.data });
+  }else{
+    return res.status(500).json({ success: false, msg: result.msg });
+  } 
+
 };
