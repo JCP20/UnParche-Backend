@@ -43,7 +43,7 @@ router.get("/", getAllEvents);
 
 router.post("/", createEvent);
 
-router.put("/:id", updateEvent);
+router.patch("/update/:id", updateEvent);
 
 router.delete("/:id", deleteEvent);
 
