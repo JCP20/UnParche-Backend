@@ -24,4 +24,12 @@ export default class GetUsers{
             return { success: false,  msg: "Ocurrió un error en el servidor" };
         }
     }
+    async getUserByParam(username: string){
+        try{
+         const users = await this.search.byParam(username);
+         return { success: true, data:users };
+        }catch(error){
+            return { success: false, msg: "Ocurrio un error en el servidor"}
+        }
+    }
 }

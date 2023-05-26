@@ -24,5 +24,12 @@ export default class SearchUserService {
     async byUsername(username: string){
         return await this.user.findOne({ username: username });
     }
-
+    async byParam(username:string){
+        return await UserModel.find({
+        $or: [
+            { username: { $regex: username, $options: "i" } },
+            { email: { $regex: username, $options: "i" } }
+          ]
+        }); 
+    }
 }
