@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import Conversation from "../../../models/Conversation.model";
+import searchConversationFacade from "../../facades/conversations/searchConversation.facade";
 
 export const getUserConversation = async (req: Request, res: Response) => {
-  try {
-    const conversation = await Conversation.find({
-      members: { $in: [req.params.id] },
-    });
-    res.status(200).json({ ok: true, data: conversation });
-  } catch (err) {
+  const search = new searchConversationFacade();
+  const result = await search.getByUser(req.params.id);
+  if(result.success) {
+    res.status(200).json({ ok: true, data: result.data});
+  } else {
     res.status(500).json({ ok: false, msg: "Internal server error" });
   }
 };

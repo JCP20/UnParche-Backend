@@ -1,50 +1,29 @@
-import UserModel from "../../../models/User.model";
 import { Request, Response } from "express";
-import JWTGenerator from "../../../helpers/jwt";
+import verifyEmailFacade from "../../facades/auth/verifyEmail.facade";
 
 export const verifyEmail = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const userUpdated = await UserModel.findByIdAndUpdate(id, {
-      verified: true,
+  const verify = new verifyEmailFacade()
+  const { id } = req.params;
+
+  const result = await verify.verifyEmail(id);
+
+  if(result.success){
+  
+    res.cookie("jwt", result.token, {
+      httpOnly: true,
+      // secure: true,
+      // sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24,
     });
 
-    if (userUpdated) {
-      const accessToken = await JWTGenerator.generateAccessToken({
-        id: userUpdated.id,
-        username: userUpdated.username,
-      });
+    return res.status(200).json({
+      ok: true,
+      msg: result.msg,
+      data: result.data,
+    });
 
-      const refreshToken = await JWTGenerator.generateRefreshToken({
-        id: userUpdated.id,
-        username: userUpdated.username,
-      });
-
-      userUpdated.refreshToken = refreshToken;
-
-      await userUpdated.save();
-
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        // secure: true,
-        // sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24,
-      });
-
-      return res.status(200).json({
-        ok: true,
-        msg: "Verificación exitosa",
-        data: {
-          id: userUpdated.id,
-          username: userUpdated.username,
-          token: accessToken,
-        },
-      });
-    } else {
-      return res.status(404).json({ ok: false, msg: "User not found" });
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ ok: false, msg: "Contact an admin" });
+  } else {
+    
+    return res.status(500).json({ ok: false, msg: result.msg });
   }
 };
