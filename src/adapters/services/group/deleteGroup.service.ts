@@ -3,7 +3,7 @@ import { IGroup } from "../../../domain/entities/groups";
 import GroupModel from "../../../models/Group.model";
 
 export default class DeleteGroupService{
-    private group = Model<IGroup>;
+    private group: Model<IGroup>;
 
     constructor(){
         this.group = GroupModel;

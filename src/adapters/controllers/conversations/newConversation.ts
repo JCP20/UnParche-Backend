@@ -1,24 +1,13 @@
 import { Request, Response } from "express";
-import Conversation from "../../../models/Conversation.model";
+import createConvFacade from "../../facades/conversations/createConversation.facade";
 
 export const newConversation = async (req: Request, res: Response) => {
-  // check if conversation already exits
-  const conversationExists = await Conversation.findOne({
-    members: { $all: [req.body.senderId, req.body.receiverId] },
-  });
-
-  if (conversationExists) {
-    return res.status(200).json({ ok: true, data: conversationExists });
-  }
-
-  const newConversation = new Conversation({
-    members: [req.body.senderId, req.body.receiverId],
-  });
-
-  try {
-    const savedConversation = await newConversation.save();
-    res.status(200).json({ ok: true, data: savedConversation });
-  } catch (err) {
-    res.status(500).json({ ok: false, msg: "Internal server error" });
+  
+  const create = new createConvFacade();
+  const result = await create.create(req.body.senderId, req.body.receiverId)
+  if(result.success){
+    res.status(200).json({ ok: true, data: result.data });
+  } else {
+    res.status(500).json({ ok: false, msg: result.msg });
   }
 };
