@@ -52,4 +52,12 @@ export default class GetGroups{
             return { success: false,  msg: "Ocurrió un error en el servidor" };
         }
     }
+    async getGroupsByParam(categories: string[], name: string){
+        try{
+            const users = await this.search.byParam(categories, name);
+            return { success: true, data: users };
+        }catch(error){
+            return { success: false,  msg: "Ocurrió un error en el servidor" };
+        }
+    }
 }

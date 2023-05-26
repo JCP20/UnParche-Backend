@@ -8,7 +8,18 @@ export default class SearchGroupService {
     constructor(){
         this.group = GroupModel;
     }
+	async byParam(categories: string[], name: string){
+        if (categories.length === 0) {
+            return await this.group.find({
+                name: { $regex: name, $options: "i" }
+            });
+        }
+        return await this.group.find({
+            name: { $regex: name, $options: "i" },
+            category: { $in: categories }
+        });
 
+    }
     async allGroups(){
         return await this.group.find({});
     }
