@@ -1,4 +1,3 @@
-import { error } from "console";
 import createConvService from "../../services/conversations/createConversation.service";
 
 export default class createConvFacade{
