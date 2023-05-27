@@ -11,7 +11,6 @@ import { getGroupByName } from "../controllers/group/getByName";
 import { getGroupsfromUser } from "../controllers/group/getByUser";
 import { getGroupsfromAdmin } from "../controllers/group/getByAdmin";
 import { getUsersFromGroup } from "../controllers/group/getUsers";
-import { Register } from "../controllers/group/register";
 import { updateGroup } from "../controllers/group/update";
 import { validateFields } from "../middlewares/validate-fields";
 import { validateJwt } from "../middlewares/validate-jwt";
@@ -28,21 +27,6 @@ router.get("/", getAllGroups);
 router.get("/:name", getGroupByName);
 router.get("/profile/:id", getGroupById);
 router.post("/", createGroup);
-
-router.post(
-  "/register",
-  [
-    // check("name", "El nombre es obligatorio").not().isEmpty(),
-    check("name", "El name es obligatorio").not().isEmpty(),
-    check("category", "Las categorias son obligatorias").not().isEmpty(),
-    check("description", "La descripción es obligatoria").not().isEmpty(),
-    check("administrators", "El administrador del grupo es obligatorio")
-      .not()
-      .isEmpty(),
-    validateFields,
-  ],
-  Register
-);
 
 router.patch(
   "/update/:groupId",

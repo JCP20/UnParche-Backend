@@ -6,7 +6,7 @@ export const getByUser = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     // find events by user
-    const events = await Event.find({ users: id });
+    const events = await Event.find({ users: id }).select("-photo -users");
 
     return res.status(200).json({ ok: true, data: events });
   } catch (error) {

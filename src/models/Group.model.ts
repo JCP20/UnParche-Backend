@@ -16,7 +16,7 @@ const GroupSchema = new Schema(
         "Otro",
       ],
     },
-    name: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
     description: { type: String, required: true },
     members: [{ type: Schema.Types.ObjectId, ref: "User", required: false }],
     administrators: [{ type: Schema.Types.ObjectId, ref: "User" }],
