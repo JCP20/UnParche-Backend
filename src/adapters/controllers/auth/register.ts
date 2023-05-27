@@ -51,16 +51,16 @@ export const register = async (req: Request, res: Response) => {
       "Otro",
     ];
 
-    // const todasCategoriasValidas = categories.every((categories: string) =>
-    //   possibleCategories.includes(categories)
-    // );
+    const todasCategoriasValidas = categories.every((categories: string) =>
+      possibleCategories.includes(categories)
+    );
 
-    // if (!todasCategoriasValidas) {
-    //   return res.status(400).json({
-    //     ok: false,
-    //     msg: "Una o más categorías proporcionadas no son válidas",
-    //   });
-    // }
+    if (!todasCategoriasValidas) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Una o más categorías proporcionadas no son válidas",
+      });
+    }
     // Encriptar contraseña
     const salt: string = await bcrypt.genSalt(10);
     const passwordCrypt: string = await bcrypt.hash(password, salt);

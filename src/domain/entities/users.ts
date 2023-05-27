@@ -1,5 +1,3 @@
-import { VerifyOptions } from "jsonwebtoken";
-
 export interface IUser {
   id: string;
   username: string;
@@ -13,7 +11,6 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
   preferredCategories: string[];
-
 }
 
 export interface IPayloadJWT {

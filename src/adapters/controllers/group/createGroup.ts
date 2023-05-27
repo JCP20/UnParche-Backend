@@ -1,6 +1,5 @@
-import { IGroup } from "../../../domain/entities/groups";
-import GroupModel from "../../../models/Group.model";
 import { Request, Response } from "express";
+import GroupModel from "../../../models/Group.model";
 
 export const createGroup = async (req: Request, res: Response) => {
   try {

@@ -10,7 +10,7 @@ import { loginUser } from "../controllers/auth/login";
 import { register } from "../controllers/auth/register";
 import { revalidateToken } from "../controllers/auth/renew";
 import { verifyEmail } from "../controllers/auth/verifyEmail";
-import { isValidEmail } from "../../helpers/customChecks";
+// import { isValidEmail } from "../../helpers/customChecks";
 import { logoutUser } from "../controllers/auth/logout";
 
 const router = Router();

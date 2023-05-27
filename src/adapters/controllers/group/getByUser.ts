@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-import GroupModel from "../../../models/Group.model";
 import { Request, Response } from "express";
+import GroupModel from "../../../models/Group.model";
 
 export const getGroupsfromUser = async (req: Request, res: Response) => {
   try {
