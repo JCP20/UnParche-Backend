@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
+import path from "path";
 
 class JWTGenerator {
   private secretAccess: string;
@@ -51,6 +52,8 @@ class JWTGenerator {
   }
 }
 
-config();
+config({
+  path: path.join(__dirname, "../.env"),
+});
 
 export default new JWTGenerator();
